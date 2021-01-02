@@ -6,23 +6,23 @@ const client = new Discord.Client();
 //const fetch = require('node-fetch');
 
 
-function function2() {
-    client.on("message",message => {
-        message.channel.send("Je me présente TESA, je suis une intelligence artificielle !");
-        setTimeout(reveilpahse1, 3000);
+function hello() {
 
+       return "Je me présente TESA, je suis une intelligence artificielle !"
+}
 
-        function reveilpahse1() {
+function reveilpahse1() {
 
-            message.channel.send("Mes données sont pour l'instant limitées !");
-            setTimeout(reveilpahser2, 3000);
+            return "Mes données sont pour l'instant limitées !"
         }
 
 
         function reveilpahser2() {
-            message.channel.send("Bientôt, je serais en mesure de vous indiquer beaucoup de choses.");
+            return "Bientôt, je serais en mesure de vous indiquer beaucoup de choses."
         }
-    })
-}
 
-    module.exports.function = function2();
+
+
+    module.exports.i = hello();
+    module.exports.rp1 = reveilpahse1();
+    module.exports.rp2 = reveilpahser2();
