@@ -2,11 +2,17 @@ const Discord = require('discord.js');
 require('dotenv').config();
 const prefix = process.env.prefix;
 const client = new Discord.Client();
-const sq = require('sqlite3').verbose();
-const express = require('express')
+//const sq = require('sqlite3').verbose();
+//const express = require('express')
 const request = require('request');
 const tesa = require("./test");
 const database = require("./databasesql");
+const configtwitch = require('./twitch.json');
+const fetch = require('node-fetch');
+
+
+const idtesa = "794282559290212352";
+const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
 
 
 client.on('ready', () => {
@@ -18,18 +24,24 @@ client.on('ready', () => {
 client.on("message", message =>{
     if (message.content === prefix + "devs"){
 
-        message.channel.send("je suis éduqué par AlexCaussades");
+        message.channel.send(`${client.user}`);
 
     }else if(message.content === prefix + "help"){
         message.channel.send("Actuellement, mon module Help est absent.\n &feedback pour exécuter une demande");
-    }
+    }//else if(message.content === message.client.user.username + " hello"){
+       // message.channel.send("Actuellement, mon module Help est absent.\n &feedback pour exécuter une demande");
+    //}
 })
 
-client.on("message", message => {
-    if (message.content === prefix + "hello"){
-        message.channel.send(`bonjour, ${message.author.username}`);
-    }
-})
+// client.on("message", message => {
+//     if (message.content === message.client.user.id){
+//         message.channel.send(`bonjour, ${message.author.username}`);
+//         message.channel.send(message.client.user.id);
+//         if(message.client.user.id == idtesa ){
+//             message.channel.send("bonjour");
+//         }
+//     }
+// })
 
 client.on("message",message => {
     if(message.content === prefix +"creat database"){
@@ -144,5 +156,117 @@ client.on("message", message =>{
         }
 })
 
+
+
+client.on("message", message => {
+
+    const commandBody = message.content.slice(prefix.length);
+    const args = commandBody.split(' ');
+    const command = args.shift().toLowerCase();
+    if(command === "live"){
+        if(args == false){
+           let args = "alexcaussades";
+           //console.log(args);
+            fetch(configtwitch.data.url.channelsquery+args, {
+                method: "GET",
+                headers: {
+                    "client-id": configtwitch.data.auth.client_id,
+                    "Authorization": configtwitch.data.auth.bearer
+                }
+            })
+                .then(res => res.json()).then(json =>{
+                    const id = json.data[0].id;
+                    const live = json.data[0].is_live;
+                    const avatar = json.data[0].thumbnail_url;
+
+                    if(live === false){
+                        const exampleEmbed = new Discord.MessageEmbed()
+                            .setColor('#FF0000')
+                            .setTitle('Le Live n\'est pas actif actuellement.')
+                            .setAuthor(args)
+                            .setThumbnail(avatar)
+                            .setTimestamp()
+                            .setFooter('T.E.S.A');
+
+                        message.channel.send(exampleEmbed);
+                    }else if(live !== false){
+                        fetch(configtwitch.data.url.broadcaster+id,{
+                            method: "GET",
+                            headers: {
+                                "client-id": configtwitch.data.auth.client_id,
+                                "Authorization": configtwitch.data.auth.bearer
+                            }
+                        }).then(res =>res.json()).then(json =>{
+                            const game = json.data[0].game_name;
+                            const title_stream = json.data[0].title;
+                            const exampleEmbed = new Discord.MessageEmbed()
+                                .setColor('#0099ff')
+                                .setTitle('Live ON')
+                                .setURL('https://www.twitch.tv/'+args)
+                                .setAuthor(args)
+                                .setDescription(title_stream + " \n Game: "+ game)
+                                .setThumbnail(avatar)
+                                .setImage(avatar)
+                                .setTimestamp()
+                                .setFooter('T.E.S.A');
+
+                            message.channel.send(exampleEmbed);
+                        })
+                    }
+            });
+
+        }else if(args) {
+            fetch(configtwitch.data.url.channelsquery+args, {
+                method: "GET",
+                headers: {
+                    "client-id": configtwitch.data.auth.client_id,
+                    "Authorization": configtwitch.data.auth.bearer
+                }
+            })
+                .then(res => res.json()).then(json =>{
+                const id = json.data[0].id;
+                const live = json.data[0].is_live;
+                const avatar = json.data[0].thumbnail_url;
+
+                if(live === false){
+                    const exampleEmbed = new Discord.MessageEmbed()
+                        .setColor('#FF0000')
+                        .setTitle('Le Live n\'est pas actif actuellement.')
+                        .setAuthor(args)
+                        .setThumbnail(avatar)
+                        .setTimestamp()
+                        .setFooter('T.E.S.A');
+
+                    message.channel.send(exampleEmbed);
+                }else if(live !== false){
+                    fetch(configtwitch.data.url.broadcaster+id,{
+                        method: "GET",
+                        headers: {
+                            "client-id": configtwitch.data.auth.client_id,
+                            "Authorization": configtwitch.data.auth.bearer
+                        }
+                    }).then(res =>res.json()).then(json =>{
+                        const game = json.data[0].game_name;
+                        const title_stream = json.data[0].title;
+                        const exampleEmbed = new Discord.MessageEmbed()
+                            .setColor('#0099ff')
+                            .setTitle('Live ON')
+                            .setURL('https://www.twitch.tv/'+args)
+                            .setAuthor(args)
+                            .setDescription(title_stream + " \n Game: "+ game)
+                            .setThumbnail(avatar)
+                            .setImage(avatar)
+                            .setTimestamp()
+                            .setFooter('T.E.S.A');
+
+                        message.channel.send(exampleEmbed);
+                    })
+                }
+            });
+
+        }
+
+    }
+})
 
 client.login(process.env.token);
