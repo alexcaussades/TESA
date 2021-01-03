@@ -17,7 +17,8 @@
     "nodemon": "^2.0.6",
     "presentation": "0.0.2",
     "sqlite": "^4.0.19",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "twitch-api-v5": "^2.0.4"
   },
   "devDependencies": {
     "request": "^2.88.2"

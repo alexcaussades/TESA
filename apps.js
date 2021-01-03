@@ -9,9 +9,11 @@ const tesa = require("./test");
 const database = require("./databasesql");
 const configtwitch = require('./twitch.json');
 const fetch = require('node-fetch');
-
+const twitch = require('./twitch');
+//const api = require('twitch-api-v5');
 const reqtesa = "tesa"
-
+//api.clientID = configtwitch.data.auth.client_id;
+//const  myid = "102253806";
 const idtesa = "794282559290212352";
 const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
 
@@ -44,15 +46,6 @@ client.on("message", message =>{
     }
 })
 
-// client.on("message", message => {
-//     if (message.content === message.client.user.id){
-//         message.channel.send(`bonjour, ${message.author.username}`);
-//         message.channel.send(message.client.user.id);
-//         if(message.client.user.id == idtesa ){
-//             message.channel.send("bonjour");
-//         }
-//     }
-// })
 
 client.on("message",message => {
     if(message.content === prefix +"creat database"){
@@ -62,7 +55,6 @@ client.on("message",message => {
            message.channel.send(tesa.i).then( message => {message.channel.send(tesa.rp1), 3000});
            message.channel.send("--------").then(message => {message.channel.send(tesa.rp2), 3000});
        }
-
    });
 
 
@@ -77,36 +69,21 @@ client.on("message", message =>{
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
-    async function getUrlMetar(icao) {
-        message.delete();
-       let sr =  process.env.metarivao+icao;
+    if(command === "metar") {
+     message.delete();
+       let sr =  process.env.metarivao+args;
         request(sr, function (error, response, body) {
-            const exampleEmbed = new Discord.MessageEmbed()
+            let test = new Discord.MessageEmbed()
                 .setColor('#8a2be2')
                 //.setTitle('metar')
                 .setAuthor(body)
                 .setTimestamp()
                 .setFooter('T.E.S.A');
-            message.channel.send(exampleEmbed);
+            message.channel.send(test);
         });
     }
+    })
 
-    if(command === "metar") {
-        (async () => {
-            let search = await getUrlMetar(args);
-            message.channel.send(search);
-        })()
-    }})
-
-client.on("message", message =>{
-    const commandBody = message.content.slice(prefix.length);
-    const args = commandBody.split('-');
-    const command = args.shift().toLowerCase();
-
-    if(command === "info"){
-        console.log(args)
-    }
-})
 
 client.on("message", message =>{
         const commandBody = message.content.slice(prefix.length);
@@ -295,6 +272,14 @@ client.on("message", message =>{
     {
         message.channel.createInvite().then(invite => message.channel.send(`Votre lien d'invitation : \n\nhttps://discord.gg/${invite.code}`))
 
+    }
+})
+
+client.on("message", message => {
+    if(message.content === 'test'){
+        //const test =  message.channel.send(twitch.test).then(twitch => console.log(twitch.test));
+        console.log(twitch.run());
+        console.log(twitch.run("alexcaussades"));
     }
 })
 
