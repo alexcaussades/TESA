@@ -10,6 +10,7 @@ const database = require("./databasesql");
 const configtwitch = require('./twitch.json');
 const fetch = require('node-fetch');
 
+const reqtesa = "tesa"
 
 const idtesa = "794282559290212352";
 const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
@@ -28,9 +29,19 @@ client.on("message", message =>{
 
     }else if(message.content === prefix + "help"){
         message.channel.send("Actuellement, mon module Help est absent.\n &feedback pour exécuter une demande");
-    }//else if(message.content === message.client.user.username + " hello"){
-       // message.channel.send("Actuellement, mon module Help est absent.\n &feedback pour exécuter une demande");
-    //}
+    } else if(message.content === reqtesa + " hello"){
+       message.channel.send(`${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `);
+    } else if(message.content === reqtesa){
+        message.channel.send(`${message.author} Qu'es que tu me veux ?`);
+    }else if(message.content === reqtesa + " sois gentille"){
+        message.channel.send(`${message.author} Oh pardon ! Mais je peux me faire pardonner avec un spam cette nuit si tu le veux bien sure. :rage: `);
+    }else if(message.content === reqtesa + " non merci"){
+        message.channel.send(`${message.author} Trop facile humain, j'ai gagné mec ! :middle_finger:  `);
+    }else if(message.content === reqtesa + " je peux avoir un café stp"){
+        message.channel.send(`${message.author} avec 100€ et un mars aussi ?`);
+    }else if(message.content === reqtesa + " bonjour"){
+        message.channel.send(`${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `);
+    }
 })
 
 // client.on("message", message => {
@@ -67,9 +78,16 @@ client.on("message", message =>{
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
     async function getUrlMetar(icao) {
+        message.delete();
        let sr =  process.env.metarivao+icao;
         request(sr, function (error, response, body) {
-            message.channel.send(body);
+            const exampleEmbed = new Discord.MessageEmbed()
+                .setColor('#8a2be2')
+                //.setTitle('metar')
+                .setAuthor(body)
+                .setTimestamp()
+                .setFooter('T.E.S.A');
+            message.channel.send(exampleEmbed);
         });
     }
 
@@ -190,6 +208,7 @@ client.on("message", message => {
 
                         message.channel.send(exampleEmbed);
                     }else if(live !== false){
+
                         fetch(configtwitch.data.url.broadcaster+id,{
                             method: "GET",
                             headers: {
@@ -216,6 +235,7 @@ client.on("message", message => {
             });
 
         }else if(args) {
+
             fetch(configtwitch.data.url.channelsquery+args, {
                 method: "GET",
                 headers: {
@@ -260,11 +280,20 @@ client.on("message", message => {
                             .setFooter('T.E.S.A');
 
                         message.channel.send(exampleEmbed);
-                    })
+                    });
                 }
             });
 
         }
+
+    }
+})
+
+client.on("message", message =>{
+    const command = message.content;
+    if(command === prefix+'inviteCreat')
+    {
+        message.channel.createInvite().then(invite => message.channel.send(`Votre lien d'invitation : \n\nhttps://discord.gg/${invite.code}`))
 
     }
 })
