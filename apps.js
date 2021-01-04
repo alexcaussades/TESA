@@ -8,9 +8,9 @@ const fs = require("fs");
 const request = require('request');
 const tesa = require("./test");
 const database = require("./databasesql");
-const configtwitch = require('./twitch.json');
+const configtwitch = require('./twitch/twitch.json');
 const fetch = require('node-fetch');
-const twitch = require('./twitch');
+const twitch = require('./twitch/twitch');
 //const api = require('twitch-api-v5');
 const reqtesa = "tesa"
 //api.clientID = configtwitch.data.auth.client_id;
@@ -26,7 +26,6 @@ client.on('ready', () => {
 
   });
 
-
 client.on("guildMemberAdd", member =>{
     console.log('User' + member.user.tag + 'has joined the server!');
     let idserveur = member.guild.id;
@@ -40,6 +39,14 @@ client.on("guildMemberAdd", member =>{
         console.log(e)
     }
 
+})
+
+client.on("channelCreate", async channel =>{
+    console.log(`Channel created: ${channel.name}`)
+})
+
+client.on("channelDelete", async channel =>{
+    console.log(`Channel delecte: ${channel.name}`)
 })
 
 client.on('message', message =>{
@@ -357,13 +364,7 @@ client.on("message", message =>{
     }
 })
 
-client.on("channelCreate", async channel =>{
-    console.log(`Channel created: ${channel.name}`)
-})
 
-client.on("channelDelete", async channel =>{
-    console.log(`Channel delecte: ${channel.name}`)
-})
 
 
 
