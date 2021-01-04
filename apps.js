@@ -4,6 +4,7 @@ const prefix = process.env.prefix;
 const client = new Discord.Client();
 //const sq = require('sqlite3').verbose();
 //const express = require('express')
+const fs = require("fs");
 const request = require('request');
 const tesa = require("./test");
 const database = require("./databasesql");
@@ -16,6 +17,7 @@ const reqtesa = "tesa"
 //const  myid = "102253806";
 const idtesa = "794282559290212352";
 const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
+const profil = require("./profil");
 
 
 client.on('ready', () => {
@@ -23,6 +25,89 @@ client.on('ready', () => {
     client.user.setActivity("I am learning my functions",{type: "PLAYING"});
 
   });
+
+
+client.on("guildMemberAdd", member =>{
+    console.log('User' + member.user.tag + 'has joined the server!');
+    let idserveur = member.guild.id;
+    try {
+        const autolrole = require("./autorole/"+idserveur+".json");
+        if(autolrole.data.id === idserveur){
+            let Role_Testrole = member.guild.roles.cache.find(r => r.id === autolrole.data.autorole);
+            member.roles.add(Role_Testrole).catch(console.error);
+        }
+    }catch (e) {
+        console.log(e)
+    }
+
+})
+
+client.on('message', message =>{
+    if(message.content === prefix+"creatMyProfil"){
+        let id = message.author.id
+        let name = message.author.username
+        profil.run(id, name);
+        //console.log(isok)
+    }
+})
+
+client.on("message", message =>{
+    const commandBody = message.content.slice(prefix.length);
+    const args = commandBody.split(' ');
+    const command = args.shift().toLowerCase();
+    if(command === "autorole"){
+
+        if(args == false){
+            const exampleEmbed = new Discord.MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle('Voici l\'utilisation de la commande ```autorole``` :')
+                .setDescription(":small_blue_diamond: Description : \n Permet d'activer ou désactiver l'autorole \n \n :small_blue_diamond:Utilisation :\n &autorole @mentiondurôle\n &autorole off ")
+                .setTimestamp()
+                .setFooter('T.E.S.A');
+
+            message.channel.send(exampleEmbed);
+        }else if (args != "off"){
+            let id = message.guild.id
+            let name = message.guild.name
+            let members = message.guild.memberCount
+            let argss = args[0]
+            let argsav = argss.substring(3)
+            let argsfinality = argsav.substring(18, -1)
+            let profil = {
+                "data":{
+                    "id": id,
+                    "name": name,
+                    "autorole": argsfinality,
+                    "autorolefull": args[0]
+                }
+            }
+            let donner = JSON.stringify(profil, null,2)
+            fs.writeFile("./autorole/"+id+".json", donner, function (error){
+                if (error) {
+                    console.log(error)
+                }
+                const exampleEmbed = new Discord.MessageEmbed()
+                    .setColor('#13f00b')
+                    .setTitle('l\'utilisation de la commande ```autorole``` :')
+                    .setDescription("Le rôle "+args[0]+" seras donné automatiquement lorsque que quelqu'un rejoint le serveur ! ")
+                    .setTimestamp()
+                    .setFooter('T.E.S.A');
+
+                message.channel.send(exampleEmbed);
+
+            })}else if (args == 'off'){
+            let id = message.guild.id
+            fs.unlinkSync("./autorole/"+id+".json");
+            const exampleEmbed = new Discord.MessageEmbed()
+                .setColor('#f02e0b')
+                .setTitle('l\'utilisation de la commande ```autorole``` :')
+                .setDescription("La commande autorole est **OFF**")
+                .setTimestamp()
+                .setFooter('T.E.S.A');
+
+            message.channel.send(exampleEmbed);
+        }
+    }})
 
 client.on("message", message =>{
     if (message.content === prefix + "devs"){
@@ -46,7 +131,6 @@ client.on("message", message =>{
     }
 })
 
-
 client.on("message",message => {
     if(message.content === prefix +"creat database"){
         message.channel.send("creation de la base en cour");
@@ -57,13 +141,11 @@ client.on("message",message => {
        }
    });
 
-
 client.on("message", message => {
     if (message.content === prefix + 'user-info') {
         message.channel.send('Your username: ' + message.author.username + '\nYour ID: ' + message.author.id);
     }
 })
-
 
 client.on("message", message =>{
     const commandBody = message.content.slice(prefix.length);
@@ -83,7 +165,6 @@ client.on("message", message =>{
         });
     }
     })
-
 
 client.on("message", message =>{
         const commandBody = message.content.slice(prefix.length);
@@ -150,8 +231,6 @@ client.on("message", message =>{
             })
         }
 })
-
-
 
 client.on("message", message => {
 
@@ -236,23 +315,26 @@ client.on("message", message => {
 
                     message.channel.send(exampleEmbed);
                 }else if(live !== false){
-                    fetch(configtwitch.data.url.broadcaster+id,{
+                    fetch(configtwitch.data.url.streams+id,{
                         method: "GET",
                         headers: {
+                            "Accept": configtwitch.data.url.apiv5,
                             "client-id": configtwitch.data.auth.client_id,
                             "Authorization": configtwitch.data.auth.bearer
                         }
                     }).then(res =>res.json()).then(json =>{
-                        const game = json.data[0].game_name;
-                        const title_stream = json.data[0].title;
+                        const game = json.stream.game;
+                        const title_stream = json.stream.channel.status;
+                        const viewer = json.stream.viewers;
+                        const preview = json.stream.preview.medium;
                         const exampleEmbed = new Discord.MessageEmbed()
                             .setColor('#0099ff')
                             .setTitle('Live ON')
                             .setURL('https://www.twitch.tv/'+args)
                             .setAuthor(args)
-                            .setDescription(title_stream + " \n Game: "+ game)
+                            .setDescription(title_stream + " \n **Game: "+ game+ "\n Viewer: " + viewer+"**")
                             .setThumbnail(avatar)
-                            .setImage(avatar)
+                            .setImage(preview)
                             .setTimestamp()
                             .setFooter('T.E.S.A');
 
@@ -275,12 +357,14 @@ client.on("message", message =>{
     }
 })
 
-client.on("message", message => {
-    if(message.content === 'test'){
-        //const test =  message.channel.send(twitch.test).then(twitch => console.log(twitch.test));
-        console.log(twitch.run());
-        console.log(twitch.run("alexcaussades"));
-    }
+client.on("channelCreate", async channel =>{
+    console.log(`Channel created: ${channel.name}`)
 })
+
+client.on("channelDelete", async channel =>{
+    console.log(`Channel delecte: ${channel.name}`)
+})
+
+
 
 client.login(process.env.token);
