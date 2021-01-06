@@ -1,0 +1,27 @@
+{
+  "data": {
+    "url": "https://ivao.aero/Member.aspx?ID="
+  },
+  "rules": {
+    "I": "IFR",
+    "V": "VFR",
+    "Y": "IFR / VFR (Y) ",
+    "Z": "VFR / IFR (Z) "
+  },
+  "gradepilote": {
+    "p1": "Observer",
+    "p2": "Basic Flight Student (FS1)",
+    "p3": "Flight Student (FS2)",
+    "p4": "Advanced Flight Student (FS3)",
+    "p5": "Private Pilot (PP)",
+    "p6": "Senior Private Pilot (SPP)",
+    "p7": "Commercial Pilot (CP)",
+    "p8": "Airline Transport Pilot (ATP)",
+    "p9": "Senior Flight Instructor (SFI)",
+    "p10": "Chief Flight Instructor (CFI)"
+  },
+  "specification": {
+    "0": "Flying",
+    "1": "Ground"
+  }
+}

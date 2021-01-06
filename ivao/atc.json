@@ -1,0 +1,19 @@
+{
+  "data": {
+    "url": "https://ivao.aero/Member.aspx?ID="
+  },
+
+  "gradepilote": {
+    "a": "Non Valide ! ",
+    "a1": "Observer",
+    "a2": "ATC Applicant (AS1)",
+    "a3": "ATC Trainee (AS2)",
+    "a4": "Advanced ATC Trainee (AS3)",
+    "a5": "Aerodrome Controller (ADC)",
+    "a6": "Approach Controller (APC)",
+    "a7": "Center Controller (ACC)",
+    "a8": "Senior Controller (SEC)",
+    "a9": "Senior ATC Instructor (SAI)",
+    "a10": "Chief ATC Instructor (CAI)"
+  }
+}

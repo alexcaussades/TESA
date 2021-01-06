@@ -1,17 +1,18 @@
 {
-  "data":{
-      "auth":{
-        "client_id": "",
-        "RefreshToken": "",
-        "AccessToken": "Bearer ",
-        "bearer": "Bearer "
-      },
-      "url": {
-        "channelsquery": "https://api.twitch.tv/helix/search/channels?query=",
-        "follower": "https://api.twitch.tv/helix/users/follows?to_id=",
-        "broadcaster": "https://api.twitch.tv/helix/channels?broadcaster_id=",
-        "streams": "https://api.twitch.tv/kraken/streams/"
-      }
+  "data": {
+    "auth": {
+      "client_id": "",
+      "RefreshToken": "",
+      "AccessToken": "Bearer ",
+      "bearer": "Bearer "
+    },
+    "url": {
+      "apiv5": "application/vnd.twitchtv.v5+json",
+      "channelsquery": "https://api.twitch.tv/helix/search/channels?query=",
+      "follower": "https://api.twitch.tv/helix/users/follows?to_id=",
+      "broadcaster": "https://api.twitch.tv/helix/channels?broadcaster_id=",
+      "streams": "https://api.twitch.tv/kraken/streams/",
+      "getstream": "https://api.twitch.tv/helix/streams"
     }
-
+  }
 }

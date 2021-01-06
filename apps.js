@@ -10,8 +10,7 @@ const tesa = require("./test");
 const database = require("./databasesql");
 const configtwitch = require('./twitch/twitch.json');
 const fetch = require('node-fetch');
-const twitch = require('./twitch/twitch');
-//const api = require('twitch-api-v5');
+const apiivao = require('./ivao/api-ivao.json');
 const reqtesa = "tesa"
 //api.clientID = configtwitch.data.auth.client_id;
 //const  myid = "102253806";
@@ -160,7 +159,7 @@ client.on("message", message =>{
     const command = args.shift().toLowerCase();
     if(command === "metar") {
      message.delete();
-       let sr =  process.env.metarivao+args;
+       let sr =  apiivao.data.metar+args;
         request(sr, function (error, response, body) {
             let test = new Discord.MessageEmbed()
                 .setColor('#8a2be2')
@@ -182,29 +181,55 @@ client.on("message", message =>{
             if(!icao){
                 process.exit();
             }
-            let sr = process.env.apiatc+icao;
+            let sr = apiivao.data.dataatc+icao;
+            let dataatcjson = require("./ivao/atc.json");
             request(sr, function (error, response, body) {
                 const obj = JSON.parse(body);
 
-                if(obj.nameAirport != undefined){
-                    message.channel.send("Information ATC on " +obj.nameAirport);
-                }
+                // if(obj.nameAirport != undefined){
+                //     message.channel.send("Information ATC on " +obj.nameAirport);
+                // }else{
+                //     message.channel.send("Plateforme non trouvée");
+                // }
 
                 const data = obj.data
                 try {
                     if(data.app.Callsign != null){
                         //message.channel.send("Information ATC on " +obj.nameAirport);
-                        message.channel.send(obj.data.app.Callsign + " is open " + obj.data.app.Frequency + " Mhz ");
-                        message.channel.send("Atis : " + obj.data.app.Atis);
+                        //message.channel.send(obj.data.app.Callsign + " : " + obj.data.app.Frequency + " Mhz ");
+                        //message.channel.send(" vid: " +obj.data.app.Vid);
+                       // message.channel.send("Atis : " + obj.data.app.Atis);
+                        let test = new Discord.MessageEmbed()
+                            .setColor('#8a2be2')
+                            .setTitle(obj.data.app.Callsign + " : " + obj.data.app.Frequency + " Mhz ")
+                            .setURL(dataatcjson.data.url+obj.data.app.Vid)
+                            .setDescription("Atis : " + obj.data.app.Atis)
+                            .addFields(
+                                { name: 'vid: ', value: obj.data.app.Vid, inline: true },
+                                { name: 'Rating: ', value: obj.data.app.rating, inline: true }
+                                )
+                            .setTimestamp()
+                            .setFooter('T.E.S.A');
+                        message.channel.send(test);
+
                     }
                 }catch (e) {
                     message.channel.send("is empty fot ICAO ex: &atc icao ");
                 }
                 try{
                     if(data.twr.Callsign != null){
-                        //message.channel.send("Information ATC on " +obj.nameAirport);
-                        message.channel.send(obj.data.twr.Callsign + " is open " + obj.data.twr.Frequency + " Mhz ");
-                        message.channel.send("Atis : " + obj.data.twr.Atis);
+                        let test = new Discord.MessageEmbed()
+                            .setColor('#8a2be2')
+                            .setTitle(obj.data.twr.Callsign + " : " + obj.data.twr.Frequency + " Mhz ")
+                            .setURL(dataatcjson.data.url+obj.data.twr.Vid)
+                            .setDescription("Atis : " + obj.data.twr.Atis)
+                            .addFields(
+                                { name: 'vid: ', value: obj.data.twr.Vid, inline: true },
+                                { name: 'Rating: ', value: obj.data.twr.rating, inline: true }
+                            )
+                            .setTimestamp()
+                            .setFooter('T.E.S.A');
+                        message.channel.send(test);
                     }
                 }catch (e) {
 
@@ -212,23 +237,65 @@ client.on("message", message =>{
                 try{
                     if(data.gnd.Callsign != null){
                         //message.channel.send("Information ATC on " +obj.nameAirport);
-                        message.channel.send(obj.data.gnd.Callsign + " is open " + obj.data.gnd.Frequency + " Mhz ");
-                        message.channel.send("Atis : " + obj.data.gnd.Atis);
+                        let test = new Discord.MessageEmbed()
+                            .setColor('#8a2be2')
+                            .setTitle(obj.data.gnd.Callsign + " : " + obj.data.gnd.Frequency + " Mhz ")
+                            .setURL(dataatcjson.data.url+obj.data.gnd.Vid)
+                            .setDescription("Atis : " + obj.data.gnd.Atis)
+                            .addFields(
+                                { name: 'vid: ', value: obj.data.gnd.Vid, inline: true },
+                                { name: 'Rating: ', value: obj.data.gnd.rating, inline: true }
+                            )
+                            .setTimestamp()
+                            .setFooter('T.E.S.A');
+                        message.channel.send(test);
                     }
                 }catch (e) {
 
                 }
                 try{
                     if(data.del.Callsign != null){
-                        //message.channel.send("Information ATC on " +obj.nameAirport);
-                        message.channel.send(obj.data.del.Callsign + " is open " + obj.data.del.Frequency + " Mhz ");
-                        message.channel.send("Atis : " + obj.data.del.Atis);
+                        let test = new Discord.MessageEmbed()
+                            .setColor('#8a2be2')
+                            .setTitle(obj.data.del.Callsign + " : " + obj.data.del.Frequency + " Mhz ")
+                            .setURL(dataatcjson.data.url+obj.data.del.Vid)
+                            .setDescription("Atis : " + obj.data.del.Atis)
+                            .addFields(
+                                { name: 'vid: ', value: obj.data.del.Vid, inline: true },
+                                { name: 'Rating: ', value: obj.data.del.rating, inline: true }
+                            )
+                            .setTimestamp()
+                            .setFooter('T.E.S.A');
+                        message.channel.send(test);
                     }
                 }catch (e) {
                     console.log(e)
                 }
                 try {
-                    if (data.app.Callsign === null && obj.data.twr.Callsign === null && obj.data.gnd.Callsign === null && obj.data.del.Callsign === null){
+                    if(data.other != null) {
+                        let nb = data.other.data
+                        for (let i=0; i < nb; i++)
+                        {
+                            let test = new Discord.MessageEmbed()
+                                .setColor('#8a2be2')
+                                .setTitle(obj.data.other[i].Callsign + " : " + obj.data.other[i].Frequency + " Mhz ")
+                                .setURL(dataatcjson.data.url + obj.data.other[i].Vid)
+                                .setDescription("Atis : " + obj.data.other[i].Atis)
+                                .addFields(
+                                    {name: 'vid: ', value: obj.data.other[i].Vid, inline: true},
+                                    {name: 'Rating: ', value: obj.data.other[i].rating, inline: true}
+                                )
+                                .setTimestamp()
+                                .setFooter('T.E.S.A');
+                            message.channel.send(test);
+                        }
+
+                    }
+                }catch (e) {
+                    console(e)
+                }
+                try {
+                    if (data.app.Callsign === null && obj.data.twr.Callsign === null && obj.data.gnd.Callsign === null && obj.data.del.Callsign === null && obj.data.other === null){
                         message.channel.send("No service contrôleur for the plateforme");
                     }
                 }catch (error) {
@@ -364,8 +431,13 @@ client.on("message", message =>{
     }
 })
 
-
-
+client.on('message', message => {
+    if(message.content === prefix+"invitebot")
+    {
+        let urlinvite = "https://discord.com/api/oauth2/authorize?client_id=794282559290212352&permissions=8&scope=bot";
+        message.channel.send(urlinvite);
+    }
+})
 
 
 client.login(process.env.token);
