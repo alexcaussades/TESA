@@ -173,6 +173,41 @@ client.on("message", message =>{
     })
 
 client.on("message", message =>{
+    const commandBody = message.content.slice(prefix.length);
+    const args = commandBody.split(' ');
+    const command = args.shift().toLowerCase();
+    if(command === "fly") {
+
+        const pilot = apiivao.data.datapilot+args;
+        const fnivao = require("./ivao/function_ivao");
+        let dataatcjson = require("./ivao/atc.json");
+        request(pilot, function (error, response, body) {
+            const objfly = JSON.parse(body);
+            let test = new Discord.MessageEmbed()
+                .setColor('#8a2be2')
+                .setTitle(objfly.data[0].callsign)
+                .setURL(dataatcjson.data.url+objfly.data[0].Vid)
+                .setDescription( "DEP: **"+ objfly.data[0].FlightplanDepartureAerodrome+ "** ARR: **"+ objfly.data[0].FlightplanDestinationAerodrome+"**\n " +
+                    "Route: "+ objfly.data[0].route + "\n" +
+                    "Flight Rules: **"+ fnivao.rule(objfly.data[0].FlightplanFlightRules)+ "** status : **"+ fnivao.specification(objfly.data[0].onGround) +"**"
+                + "Cruising Level required: **" + objfly.data[0].FlightplanCruisingLevel + "**")
+             .addFields(
+                 { name: 'remarks: ', value: objfly.data[0].remarks },
+                 { name: 'Aircraft: ', value: objfly.data[0].fullAircraft },
+                 { name: 'altitude: ', value: objfly.data[0].altitude+ "ft", inline: true },
+                 { name: 'POB: ', value: objfly.data[0].pob, inline: true },
+                 { name: 'Rating: ', value: fnivao.gradepilote(objfly.data[0].rating), inline: true },
+                 { name: 'vid: ', value: objfly.data[0].Vid, inline: true },
+                 { name: 'Departure Time: ', value: objfly.data[0].departureTime, inline: true },
+             )
+            .setTimestamp()
+            .setFooter('T.E.S.A');
+            message.channel.send(test);
+        })
+    }
+    })
+
+client.on("message", message =>{
         const commandBody = message.content.slice(prefix.length);
         const args = commandBody.split(' ');
         const command = args.shift().toLowerCase();
@@ -181,7 +216,8 @@ client.on("message", message =>{
             if(!icao){
                 process.exit();
             }
-            let sr = apiivao.data.dataatc+icao;
+            const sr = apiivao.data.dataatc+icao;
+            const fnivao = require("./ivao/function_ivao");
             let dataatcjson = require("./ivao/atc.json");
             request(sr, function (error, response, body) {
                 const obj = JSON.parse(body);
@@ -206,7 +242,7 @@ client.on("message", message =>{
                             .setDescription("Atis : " + obj.data.app.Atis)
                             .addFields(
                                 { name: 'vid: ', value: obj.data.app.Vid, inline: true },
-                                { name: 'Rating: ', value: obj.data.app.rating, inline: true }
+                                { name: 'Rating: ', value: fnivao.gradeatc(data.app.rating), inline: true }
                                 )
                             .setTimestamp()
                             .setFooter('T.E.S.A');
@@ -225,7 +261,7 @@ client.on("message", message =>{
                             .setDescription("Atis : " + obj.data.twr.Atis)
                             .addFields(
                                 { name: 'vid: ', value: obj.data.twr.Vid, inline: true },
-                                { name: 'Rating: ', value: obj.data.twr.rating, inline: true }
+                                { name: 'Rating: ', value: fnivao.gradeatc(obj.data.twr.rating), inline: true }
                             )
                             .setTimestamp()
                             .setFooter('T.E.S.A');
@@ -244,7 +280,7 @@ client.on("message", message =>{
                             .setDescription("Atis : " + obj.data.gnd.Atis)
                             .addFields(
                                 { name: 'vid: ', value: obj.data.gnd.Vid, inline: true },
-                                { name: 'Rating: ', value: obj.data.gnd.rating, inline: true }
+                                { name: 'Rating: ', value: fnivao.gradeatc(obj.data.gnd.rating), inline: true }
                             )
                             .setTimestamp()
                             .setFooter('T.E.S.A');
@@ -262,7 +298,7 @@ client.on("message", message =>{
                             .setDescription("Atis : " + obj.data.del.Atis)
                             .addFields(
                                 { name: 'vid: ', value: obj.data.del.Vid, inline: true },
-                                { name: 'Rating: ', value: obj.data.del.rating, inline: true }
+                                { name: 'Rating: ', value: fnivao.gradeatc(obj.data.del.rating), inline: true }
                             )
                             .setTimestamp()
                             .setFooter('T.E.S.A');
@@ -283,7 +319,7 @@ client.on("message", message =>{
                                 .setDescription("Atis : " + obj.data.other[i].Atis)
                                 .addFields(
                                     {name: 'vid: ', value: obj.data.other[i].Vid, inline: true},
-                                    {name: 'Rating: ', value: obj.data.other[i].rating, inline: true}
+                                    {name: 'Rating: ', value: fnivao.gradeatc(obj.data.other[i].rating), inline: true}
                                 )
                                 .setTimestamp()
                                 .setFooter('T.E.S.A');
@@ -292,7 +328,7 @@ client.on("message", message =>{
 
                     }
                 }catch (e) {
-                    console(e)
+                    console.log(e)
                 }
                 try {
                     if (data.app.Callsign === null && obj.data.twr.Callsign === null && obj.data.gnd.Callsign === null && obj.data.del.Callsign === null && obj.data.other === null){
