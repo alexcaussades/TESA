@@ -14,8 +14,8 @@ const apiivao = require('./ivao/api-ivao.json');
 const reqtesa = "tesa"
 //api.clientID = configtwitch.data.auth.client_id;
 //const  myid = "102253806";
-const idtesa = "794282559290212352";
-const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
+//const idtesa = "794282559290212352";
+//const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
 const profil = require("./profil");
 
 
@@ -153,6 +153,9 @@ client.on("message", message => {
     }
 })
 
+/**
+ * search metard api ivao
+ * */
 client.on("message", message =>{
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
@@ -171,6 +174,10 @@ client.on("message", message =>{
         });
     }
     })
+
+/**
+ * search fly api ivao
+ * */
 
 client.on("message", message =>{
     const commandBody = message.content.slice(prefix.length);
@@ -206,7 +213,9 @@ client.on("message", message =>{
         })
     }
     })
-
+/**
+ * search atc api ivao
+ * */
 client.on("message", message =>{
         const commandBody = message.content.slice(prefix.length);
         const args = commandBody.split(' ');
@@ -331,7 +340,7 @@ client.on("message", message =>{
                     console.log(e)
                 }
                 try {
-                    if (data.app.Callsign === null && obj.data.twr.Callsign === null && obj.data.gnd.Callsign === null && obj.data.del.Callsign === null && obj.data.other === null){
+                    if (data.app.Callsign === null && obj.data.twr.Callsign === null && obj.data.gnd.Callsign === null && obj.data.del.Callsign === null){
                         message.channel.send("No service contrôleur for the plateforme");
                     }
                 }catch (error) {
@@ -342,6 +351,9 @@ client.on("message", message =>{
         }
 })
 
+/**
+ * search live on the twitch
+ * */
 client.on("message", message => {
 
     const commandBody = message.content.slice(prefix.length);
@@ -458,6 +470,67 @@ client.on("message", message => {
     }
 })
 
+/**
+ * search vid api ivao
+ * */
+client.on("message", message =>{
+    const commandBody = message.content.slice(prefix.length);
+    const args = commandBody.split(' ');
+    const command = args.shift().toLowerCase();
+    if(command === "vid") {
+        const sr = apiivao.data.datavid+args
+        const fnivao = require("./ivao/function_ivao");
+        let dataatcjson = require("./ivao/atc.json");
+        request(sr, function (error, response, body) {
+            const objvid = JSON.parse(body);
+            console.log(objvid);
+            if(objvid.data.atc.Callsign != null)
+            {
+                let test = new Discord.MessageEmbed()
+                    .setColor('#8a2be2')
+                    .setTitle(objvid.data.atc.Callsign + " : " + objvid.data.atc.Frequency + " Mhz ")
+                    .setURL(dataatcjson.data.url+objvid.data.atc.Vid)
+                    .setDescription("Atis : " + objvid.data.atc.Atis)
+                    .addFields(
+                        { name: 'vid: ', value: objvid.data.atc.Vid, inline: true },
+                        { name: 'Rating: ', value: fnivao.gradeatc(objvid.data.atc.rating), inline: true }
+                    )
+                    .setTimestamp()
+                    .setFooter('T.E.S.A');
+                message.channel.send(test);
+
+            }else if(objvid.data.pilot.callsign != null){
+                let test = new Discord.MessageEmbed()
+                    .setColor('#8a2be2')
+                    .setTitle(objvid.data.pilot.callsign)
+                    .setURL(dataatcjson.data.url+objvid.data.pilot.Vid)
+                    .setDescription( "DEP: **"+ objvid.data.pilot.FlightplanDepartureAerodrome+ "** ARR: **"+ objvid.data.pilot.FlightplanDestinationAerodrome+"**\n " +
+                        "Route: "+ objvid.data.pilot.route + "\n" +
+                        "Flight Rules: **"+ fnivao.rule(objvid.data.pilot.FlightplanFlightRules)+ "** status : **"+ fnivao.specification(objvid.data.pilot.onGround) +"**"
+                        + " Cruising Level required: **" + objvid.data.pilot.FlightplanCruisingLevel + "**")
+                    .addFields(
+                        { name: 'remarks: ', value: objvid.data.pilot.remarks },
+                        { name: 'Aircraft: ', value: objvid.data.pilot.fullAircraft },
+                        { name: 'altitude: ', value: objvid.data.pilot.altitude+ "ft", inline: true },
+                        { name: 'POB: ', value: objvid.data.pilot.pob, inline: true },
+                        { name: 'Rating: ', value: fnivao.gradepilote(objvid.data.pilot.rating), inline: true },
+                        { name: 'vid: ', value: objvid.data.pilot.Vid, inline: true },
+                        { name: 'Departure Time: ', value: objvid.data.pilot.departureTime, inline: true },
+                    )
+                    .setTimestamp()
+                    .setFooter('T.E.S.A');
+                message.channel.send(test);
+
+            }else{
+                message.channel.send("not on ligne for the VID :" + args);
+            }
+
+            })
+    }})
+
+/**
+ * creation invite membre
+ * */
 client.on("message", message =>{
     const command = message.content;
     if(command === prefix+'inviteCreat')
@@ -467,6 +540,9 @@ client.on("message", message =>{
     }
 })
 
+/**
+ * creation invite bot
+ * */
 client.on('message', message => {
     if(message.content === prefix+"invitebot")
     {
