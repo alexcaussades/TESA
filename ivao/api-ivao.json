@@ -4,6 +4,7 @@
     "dataatc": "https://alexcaussades.com/api-ivao/atc.php?icao=",
     "datapilot": "https://alexcaussades.com/api-ivao/pilot.php?callsign=",
     "dataairport": "https://alexcaussades.com/api-ivao/airport.php?icao=",
-    "datavid": "https://alexcaussades.com/api-ivao/vid.php?vid="
+    "datavid": "https://alexcaussades.com/api-ivao/vid.php?vid=",
+    "datavidfav": "https://alexcaussades.com/api-ivao/vidfav.php?vid="
   }
 }

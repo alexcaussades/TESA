@@ -1,4 +1,4 @@
-const fs = require("fs");
+
 
 module.exports.run = async (id, name) => {
     let membre_id = id;
@@ -8,7 +8,8 @@ module.exports.run = async (id, name) => {
         "data":{
             "id": membre_id,
             "name": membre_name
-        }
+        },
+
     }
     let donner = JSON.stringify(profil, null,2)
     await fs.writeFile("./profilmembre/"+membre_id+".json", donner, function (error){

@@ -3,7 +3,6 @@ require('dotenv').config();
 const prefix = process.env.prefix;
 const client = new Discord.Client();
 //const sq = require('sqlite3').verbose();
-//const express = require('express')
 const fs = require("fs");
 const request = require('request');
 const tesa = require("./test");
@@ -17,6 +16,7 @@ const reqtesa = "tesa"
 //const idtesa = "794282559290212352";
 //const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
 const profil = require("./profil");
+const favi = require("./ivao/addfive")
 
 
 client.on('ready', () => {
@@ -61,8 +61,22 @@ client.on("message", message =>{
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
-    if(command === "autorole"){
+    if(command === "add-vid") {
+        let id = message.author.id
+        let name = message.author.username
+        let vidarray = args;
+        console.log(id, name, vidarray)
+        favi.run(id, name, vidarray)
 
+    }
+})
+
+client.on("message", message =>{
+    const commandBody = message.content.slice(prefix.length);
+    const args = commandBody.split(' ');
+    const command = args.shift().toLowerCase();
+    if(command === "autorole"){
+        message.delete();
         if(args == false){
             const exampleEmbed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
@@ -117,28 +131,36 @@ client.on("message", message =>{
 
 client.on("message", message =>{
     if (message.content === prefix + "devs"){
-
+        message.delete();
         message.channel.send(`${client.user}`);
 
     }else if(message.content === prefix + "help"){
+        message.delete();
         message.channel.send("Actuellement, mon module Help est absent.\n &feedback pour exécuter une demande");
     } else if(message.content === reqtesa + " hello"){
+        message.delete();
        message.channel.send(`${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `);
     } else if(message.content === reqtesa){
+        message.delete();
         message.channel.send(`${message.author} Qu'es que tu me veux ?`);
     }else if(message.content === reqtesa + " sois gentille"){
+        message.delete();
         message.channel.send(`${message.author} Oh pardon ! Mais je peux me faire pardonner avec un spam cette nuit si tu le veux bien sure. :rage: `);
     }else if(message.content === reqtesa + " non merci"){
+        message.delete();
         message.channel.send(`${message.author} Trop facile humain, j'ai gagné mec ! :middle_finger:  `);
     }else if(message.content === reqtesa + " je peux avoir un café stp"){
+        message.delete();
         message.channel.send(`${message.author} avec 100€ et un mars aussi ?`);
     }else if(message.content === reqtesa + " bonjour"){
+        message.delete();
         message.channel.send(`${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `);
     }
 })
 
 client.on("message",message => {
     if(message.content === prefix +"creat database"){
+        message.delete();
         message.channel.send("creation de la base en cour");
         database.creatdata;
            message.channel.send("La création de la base de donées à bien étais éffectuer !");
@@ -149,6 +171,7 @@ client.on("message",message => {
 
 client.on("message", message => {
     if (message.content === prefix + 'user-info') {
+        message.delete();
         message.channel.send('Your username: ' + message.author.username + '\nYour ID: ' + message.author.id);
     }
 })
@@ -184,7 +207,7 @@ client.on("message", message =>{
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
     if(command === "fly") {
-
+        message.delete();
         const pilot = apiivao.data.datapilot+args;
         const fnivao = require("./ivao/function_ivao");
         let dataatcjson = require("./ivao/atc.json");
@@ -221,6 +244,7 @@ client.on("message", message =>{
         const args = commandBody.split(' ');
         const command = args.shift().toLowerCase();
         if(command === "atc"){
+            message.delete();
             let icao = args
             if(!icao){
                 process.exit();
@@ -360,6 +384,7 @@ client.on("message", message => {
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
     if(command === "live"){
+        message.delete();
         if(args == false){
            let args = "alexcaussades";
            //console.log(args);
@@ -478,12 +503,13 @@ client.on("message", message =>{
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
     if(command === "vid") {
+        message.delete();
         const sr = apiivao.data.datavid+args
         const fnivao = require("./ivao/function_ivao");
         let dataatcjson = require("./ivao/atc.json");
         request(sr, function (error, response, body) {
             const objvid = JSON.parse(body);
-            console.log(objvid);
+            //console.log(objvid);
             if(objvid.data.atc.Callsign != null)
             {
                 let test = new Discord.MessageEmbed()
@@ -522,7 +548,7 @@ client.on("message", message =>{
                 message.channel.send(test);
 
             }else{
-                message.channel.send("not on ligne for the VID :" + args);
+                message.channel.send("not on ligne for the VID: " + args);
             }
 
             })
@@ -535,6 +561,7 @@ client.on("message", message =>{
     const command = message.content;
     if(command === prefix+'inviteCreat')
     {
+        message.delete();
         message.channel.createInvite().then(invite => message.channel.send(`Votre lien d'invitation : \n\nhttps://discord.gg/${invite.code}`))
 
     }
@@ -546,6 +573,7 @@ client.on("message", message =>{
 client.on('message', message => {
     if(message.content === prefix+"invitebot")
     {
+        message.delete();
         let urlinvite = "https://discord.com/api/oauth2/authorize?client_id=794282559290212352&permissions=8&scope=bot";
         message.channel.send(urlinvite);
     }
