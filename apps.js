@@ -52,11 +52,12 @@ client.on('message', message =>{
     if(message.content === prefix+"creatMyProfil"){
         let id = message.author.id
         let name = message.author.username
-        profil.run(id, name);
-        //console.log(isok)
+        profil.run(client, message, id, name);
     }
 })
-
+/**
+ * todo function a refaire en urgence
+ * */
 client.on("message", message =>{
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
@@ -186,15 +187,8 @@ client.on("message", message =>{
     if(command === "metar") {
      message.delete();
        let sr =  apiivao.data.metar+args;
-        request(sr, function (error, response, body) {
-            let test = new Discord.MessageEmbed()
-                .setColor('#8a2be2')
-                //.setTitle('metar')
-                .setAuthor(body)
-                .setTimestamp()
-                .setFooter('T.E.S.A');
-            message.channel.send(test);
-        });
+        let metar = require("./ivao/metar");
+        metar.run(client, message, sr)
     }
     })
 
@@ -211,31 +205,9 @@ client.on("message", message =>{
         const pilot = apiivao.data.datapilot+args;
         const fnivao = require("./ivao/function_ivao");
         let dataatcjson = require("./ivao/atc.json");
-        request(pilot, function (error, response, body) {
-            const objfly = JSON.parse(body);
-            let test = new Discord.MessageEmbed()
-                .setColor('#8a2be2')
-                .setTitle(objfly.data[0].callsign)
-                .setURL(dataatcjson.data.url+objfly.data[0].Vid)
-                .setDescription( "DEP: **"+ objfly.data[0].FlightplanDepartureAerodrome+ "** ARR: **"+ objfly.data[0].FlightplanDestinationAerodrome+"**\n " +
-                    "Route: "+ objfly.data[0].route + "\n" +
-                    "Flight Rules: **"+ fnivao.rule(objfly.data[0].FlightplanFlightRules)+ "** status : **"+ fnivao.specification(objfly.data[0].onGround) +"**"
-                + "Cruising Level required: **" + objfly.data[0].FlightplanCruisingLevel + "**")
-             .addFields(
-                 { name: 'remarks: ', value: objfly.data[0].remarks },
-                 { name: 'Aircraft: ', value: objfly.data[0].fullAircraft },
-                 { name: 'altitude: ', value: objfly.data[0].altitude+ "ft", inline: true },
-                 { name: 'POB: ', value: objfly.data[0].pob, inline: true },
-                 { name: 'Rating: ', value: fnivao.gradepilote(objfly.data[0].rating), inline: true },
-                 { name: 'vid: ', value: objfly.data[0].Vid, inline: true },
-                 { name: 'Departure Time: ', value: objfly.data[0].departureTime, inline: true },
-             )
-            .setTimestamp()
-            .setFooter('T.E.S.A');
-            message.channel.send(test);
-        })
-    }
-    })
+        const module_fly = require("./ivao/fly");
+        module_fly.run(client, message, pilot, fnivao, dataatcjson)
+    }})
 /**
  * search atc api ivao
  * */
@@ -249,129 +221,8 @@ client.on("message", message =>{
             if(!icao){
                 process.exit();
             }
-            const sr = apiivao.data.dataatc+icao;
-            const fnivao = require("./ivao/function_ivao");
-            let dataatcjson = require("./ivao/atc.json");
-            request(sr, function (error, response, body) {
-                const obj = JSON.parse(body);
-
-                // if(obj.nameAirport != undefined){
-                //     message.channel.send("Information ATC on " +obj.nameAirport);
-                // }else{
-                //     message.channel.send("Plateforme non trouvée");
-                // }
-
-                const data = obj.data
-                try {
-                    if(data.app.Callsign != null){
-                        //message.channel.send("Information ATC on " +obj.nameAirport);
-                        //message.channel.send(obj.data.app.Callsign + " : " + obj.data.app.Frequency + " Mhz ");
-                        //message.channel.send(" vid: " +obj.data.app.Vid);
-                       // message.channel.send("Atis : " + obj.data.app.Atis);
-                        let test = new Discord.MessageEmbed()
-                            .setColor('#8a2be2')
-                            .setTitle(obj.data.app.Callsign + " : " + obj.data.app.Frequency + " Mhz ")
-                            .setURL(dataatcjson.data.url+obj.data.app.Vid)
-                            .setDescription("Atis : " + obj.data.app.Atis)
-                            .addFields(
-                                { name: 'vid: ', value: obj.data.app.Vid, inline: true },
-                                { name: 'Rating: ', value: fnivao.gradeatc(data.app.rating), inline: true }
-                                )
-                            .setTimestamp()
-                            .setFooter('T.E.S.A');
-                        message.channel.send(test);
-
-                    }
-                }catch (e) {
-                    message.channel.send("is empty fot ICAO ex: &atc icao ");
-                }
-                try{
-                    if(data.twr.Callsign != null){
-                        let test = new Discord.MessageEmbed()
-                            .setColor('#8a2be2')
-                            .setTitle(obj.data.twr.Callsign + " : " + obj.data.twr.Frequency + " Mhz ")
-                            .setURL(dataatcjson.data.url+obj.data.twr.Vid)
-                            .setDescription("Atis : " + obj.data.twr.Atis)
-                            .addFields(
-                                { name: 'vid: ', value: obj.data.twr.Vid, inline: true },
-                                { name: 'Rating: ', value: fnivao.gradeatc(obj.data.twr.rating), inline: true }
-                            )
-                            .setTimestamp()
-                            .setFooter('T.E.S.A');
-                        message.channel.send(test);
-                    }
-                }catch (e) {
-
-                }
-                try{
-                    if(data.gnd.Callsign != null){
-                        //message.channel.send("Information ATC on " +obj.nameAirport);
-                        let test = new Discord.MessageEmbed()
-                            .setColor('#8a2be2')
-                            .setTitle(obj.data.gnd.Callsign + " : " + obj.data.gnd.Frequency + " Mhz ")
-                            .setURL(dataatcjson.data.url+obj.data.gnd.Vid)
-                            .setDescription("Atis : " + obj.data.gnd.Atis)
-                            .addFields(
-                                { name: 'vid: ', value: obj.data.gnd.Vid, inline: true },
-                                { name: 'Rating: ', value: fnivao.gradeatc(obj.data.gnd.rating), inline: true }
-                            )
-                            .setTimestamp()
-                            .setFooter('T.E.S.A');
-                        message.channel.send(test);
-                    }
-                }catch (e) {
-
-                }
-                try{
-                    if(data.del.Callsign != null){
-                        let test = new Discord.MessageEmbed()
-                            .setColor('#8a2be2')
-                            .setTitle(obj.data.del.Callsign + " : " + obj.data.del.Frequency + " Mhz ")
-                            .setURL(dataatcjson.data.url+obj.data.del.Vid)
-                            .setDescription("Atis : " + obj.data.del.Atis)
-                            .addFields(
-                                { name: 'vid: ', value: obj.data.del.Vid, inline: true },
-                                { name: 'Rating: ', value: fnivao.gradeatc(obj.data.del.rating), inline: true }
-                            )
-                            .setTimestamp()
-                            .setFooter('T.E.S.A');
-                        message.channel.send(test);
-                    }
-                }catch (e) {
-                    console.log(e)
-                }
-                try {
-                    if(data.other != null) {
-                        let nb = data.other.data
-                        for (let i=0; i < nb; i++)
-                        {
-                            let test = new Discord.MessageEmbed()
-                                .setColor('#8a2be2')
-                                .setTitle(obj.data.other[i].Callsign + " : " + obj.data.other[i].Frequency + " Mhz ")
-                                .setURL(dataatcjson.data.url + obj.data.other[i].Vid)
-                                .setDescription("Atis : " + obj.data.other[i].Atis)
-                                .addFields(
-                                    {name: 'vid: ', value: obj.data.other[i].Vid, inline: true},
-                                    {name: 'Rating: ', value: fnivao.gradeatc(obj.data.other[i].rating), inline: true}
-                                )
-                                .setTimestamp()
-                                .setFooter('T.E.S.A');
-                            message.channel.send(test);
-                        }
-
-                    }
-                }catch (e) {
-                    console.log(e)
-                }
-                try {
-                    if (data.app.Callsign === null && obj.data.twr.Callsign === null && obj.data.gnd.Callsign === null && obj.data.del.Callsign === null){
-                        message.channel.send("No service contrôleur for the plateforme");
-                    }
-                }catch (error) {
-                    console.log(error)
-                }
-
-            })
+           let module_atc = require("./ivao/atc")
+            module_atc.run(client,message, apiivao, icao)
         }
 })
 
@@ -504,54 +355,8 @@ client.on("message", message =>{
     const command = args.shift().toLowerCase();
     if(command === "vid") {
         message.delete();
-        const sr = apiivao.data.datavid+args
-        const fnivao = require("./ivao/function_ivao");
-        let dataatcjson = require("./ivao/atc.json");
-        request(sr, function (error, response, body) {
-            const objvid = JSON.parse(body);
-            //console.log(objvid);
-            if(objvid.data.atc.Callsign != null)
-            {
-                let test = new Discord.MessageEmbed()
-                    .setColor('#8a2be2')
-                    .setTitle(objvid.data.atc.Callsign + " : " + objvid.data.atc.Frequency + " Mhz ")
-                    .setURL(dataatcjson.data.url+objvid.data.atc.Vid)
-                    .setDescription("Atis : " + objvid.data.atc.Atis)
-                    .addFields(
-                        { name: 'vid: ', value: objvid.data.atc.Vid, inline: true },
-                        { name: 'Rating: ', value: fnivao.gradeatc(objvid.data.atc.rating), inline: true }
-                    )
-                    .setTimestamp()
-                    .setFooter('T.E.S.A');
-                message.channel.send(test);
-
-            }else if(objvid.data.pilot.callsign != null){
-                let test = new Discord.MessageEmbed()
-                    .setColor('#8a2be2')
-                    .setTitle(objvid.data.pilot.callsign)
-                    .setURL(dataatcjson.data.url+objvid.data.pilot.Vid)
-                    .setDescription( "DEP: **"+ objvid.data.pilot.FlightplanDepartureAerodrome+ "** ARR: **"+ objvid.data.pilot.FlightplanDestinationAerodrome+"**\n " +
-                        "Route: "+ objvid.data.pilot.route + "\n" +
-                        "Flight Rules: **"+ fnivao.rule(objvid.data.pilot.FlightplanFlightRules)+ "** status : **"+ fnivao.specification(objvid.data.pilot.onGround) +"**"
-                        + " Cruising Level required: **" + objvid.data.pilot.FlightplanCruisingLevel + "**")
-                    .addFields(
-                        { name: 'remarks: ', value: objvid.data.pilot.remarks },
-                        { name: 'Aircraft: ', value: objvid.data.pilot.fullAircraft },
-                        { name: 'altitude: ', value: objvid.data.pilot.altitude+ "ft", inline: true },
-                        { name: 'POB: ', value: objvid.data.pilot.pob, inline: true },
-                        { name: 'Rating: ', value: fnivao.gradepilote(objvid.data.pilot.rating), inline: true },
-                        { name: 'vid: ', value: objvid.data.pilot.Vid, inline: true },
-                        { name: 'Departure Time: ', value: objvid.data.pilot.departureTime, inline: true },
-                    )
-                    .setTimestamp()
-                    .setFooter('T.E.S.A');
-                message.channel.send(test);
-
-            }else{
-                message.channel.send("not on ligne for the VID: " + args);
-            }
-
-            })
+       let module_vidsr = require('./ivao/vid')
+        module_vidsr.run(client, message, apiivao, args)
     }})
 
 /**
@@ -562,7 +367,7 @@ client.on("message", message =>{
     if(command === prefix+'inviteCreat')
     {
         message.delete();
-        message.channel.createInvite().then(invite => message.channel.send(`Votre lien d'invitation : \n\nhttps://discord.gg/${invite.code}`))
+        message.channel.createInvite().then(invite => message.author.send(`Votre lien d'invitation : \n\nhttps://discord.gg/${invite.code}`))
 
     }
 })
@@ -575,7 +380,7 @@ client.on('message', message => {
     {
         message.delete();
         let urlinvite = "https://discord.com/api/oauth2/authorize?client_id=794282559290212352&permissions=8&scope=bot";
-        message.channel.send(urlinvite);
+        message.author.send(urlinvite);
     }
 })
 

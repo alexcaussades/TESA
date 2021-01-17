@@ -1,21 +1,16 @@
 
 
-module.exports.run = async (id, name) => {
+module.exports.run = async (client, message, id, name) => {
     let membre_id = id;
     let membre_name = name;
+    message.delete();
 
-    let profil = {
-        "data":{
-            "id": membre_id,
-            "name": membre_name
-        },
-
-    }
-    let donner = JSON.stringify(profil, null,2)
-    await fs.writeFile("./profilmembre/"+membre_id+".json", donner, function (error){
-
-        if (error) {
-            console.log(error)
-        }
-    })
+    //let donner = JSON.stringify(profil, null,2)
+    message.author.send("oki cool")
+    // await fs.writeFile("./profilmembre/"+membre_id+".json", donner, function (error){
+    //
+    //     if (error) {
+    //         console.log(error)
+    //     }
+    // })
 }
