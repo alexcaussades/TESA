@@ -191,7 +191,7 @@ client.on("message", message => {
     if(command === "live"){
         message.delete();
        let module_twitch = require("./twitch/twitch.js")
-        module_twitch.run(client, message, args, configtwitch)
+        module_twitch.run(client, message, args)
     }
 })
 
