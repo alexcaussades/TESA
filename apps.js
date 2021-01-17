@@ -2,19 +2,11 @@ const Discord = require('discord.js');
 require('dotenv').config();
 const prefix = process.env.prefix;
 const client = new Discord.Client();
-//const sq = require('sqlite3').verbose();
-const fs = require("fs");
-const request = require('request');
 const tesa = require("./test");
 const database = require("./databasesql");
 const configtwitch = require('./twitch/twitch.json');
-const fetch = require('node-fetch');
 const apiivao = require('./ivao/api-ivao.json');
 const reqtesa = "tesa"
-//api.clientID = configtwitch.data.auth.client_id;
-//const  myid = "102253806";
-//const idtesa = "794282559290212352";
-//const meteo = "http://api.openweathermap.org/data/2.5/weather?q=limoges&appid=6db93a028b58851dcd81193539d903de&units=metric";
 const profil = require("./profil");
 const favi = require("./ivao/addfive")
 
@@ -198,113 +190,8 @@ client.on("message", message => {
     const command = args.shift().toLowerCase();
     if(command === "live"){
         message.delete();
-        if(args == false){
-           let args = "alexcaussades";
-           //console.log(args);
-            fetch(configtwitch.data.url.channelsquery+args, {
-                method: "GET",
-                headers: {
-                    "client-id": configtwitch.data.auth.client_id,
-                    "Authorization": configtwitch.data.auth.bearer
-                }
-            })
-                .then(res => res.json()).then(json =>{
-                    const id = json.data[0].id;
-                    const live = json.data[0].is_live;
-                    const avatar = json.data[0].thumbnail_url;
-
-                    if(live === false){
-                        const exampleEmbed = new Discord.MessageEmbed()
-                            .setColor('#FF0000')
-                            .setTitle('Le Live n\'est pas actif actuellement.')
-                            .setAuthor(args)
-                            .setThumbnail(avatar)
-                            .setTimestamp()
-                            .setFooter('T.E.S.A');
-
-                        message.channel.send(exampleEmbed);
-                    }else if(live !== false){
-
-                        fetch(configtwitch.data.url.broadcaster+id,{
-                            method: "GET",
-                            headers: {
-                                "client-id": configtwitch.data.auth.client_id,
-                                "Authorization": configtwitch.data.auth.bearer
-                            }
-                        }).then(res =>res.json()).then(json =>{
-                            const game = json.data[0].game_name;
-                            const title_stream = json.data[0].title;
-                            const exampleEmbed = new Discord.MessageEmbed()
-                                .setColor('#0099ff')
-                                .setTitle('Live ON')
-                                .setURL('https://www.twitch.tv/'+args)
-                                .setAuthor(args)
-                                .setDescription(title_stream + " \n Game: "+ game)
-                                .setThumbnail(avatar)
-                                .setImage(avatar)
-                                .setTimestamp()
-                                .setFooter('T.E.S.A');
-
-                            message.channel.send(exampleEmbed);
-                        })
-                    }
-            });
-
-        }else if(args) {
-
-            fetch(configtwitch.data.url.channelsquery+args, {
-                method: "GET",
-                headers: {
-                    "client-id": configtwitch.data.auth.client_id,
-                    "Authorization": configtwitch.data.auth.bearer
-                }
-            })
-                .then(res => res.json()).then(json =>{
-                const id = json.data[0].id;
-                const live = json.data[0].is_live;
-                const avatar = json.data[0].thumbnail_url;
-
-                if(live === false){
-                    const exampleEmbed = new Discord.MessageEmbed()
-                        .setColor('#FF0000')
-                        .setTitle('Le Live n\'est pas actif actuellement.')
-                        .setAuthor(args)
-                        .setThumbnail(avatar)
-                        .setTimestamp()
-                        .setFooter('T.E.S.A');
-
-                    message.channel.send(exampleEmbed);
-                }else if(live !== false){
-                    fetch(configtwitch.data.url.streams+id,{
-                        method: "GET",
-                        headers: {
-                            "Accept": configtwitch.data.url.apiv5,
-                            "client-id": configtwitch.data.auth.client_id,
-                            "Authorization": configtwitch.data.auth.bearer
-                        }
-                    }).then(res =>res.json()).then(json =>{
-                        const game = json.stream.game;
-                        const title_stream = json.stream.channel.status;
-                        const viewer = json.stream.viewers;
-                        const preview = json.stream.preview.medium;
-                        const exampleEmbed = new Discord.MessageEmbed()
-                            .setColor('#0099ff')
-                            .setTitle('Live ON')
-                            .setURL('https://www.twitch.tv/'+args)
-                            .setAuthor(args)
-                            .setDescription(title_stream + " \n **Game: "+ game+ "\n Viewer: " + viewer+"**")
-                            .setThumbnail(avatar)
-                            .setImage(preview)
-                            .setTimestamp()
-                            .setFooter('T.E.S.A');
-
-                        message.channel.send(exampleEmbed);
-                    });
-                }
-            });
-
-        }
-
+       let module_twitch = require("./twitch/twitch.js")
+        module_twitch.run(client, message, args, configtwitch)
     }
 })
 
