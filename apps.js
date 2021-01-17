@@ -26,7 +26,7 @@ client.on("guildMemberAdd", member =>{
     console.log('User' + member.user.tag + 'has joined the server!');
     let idserveur = member.guild.id;
     try {
-        const autolrole = require("./autorole/"+idserveur+".json");
+        const autolrole = require("./autorole/serveur/"+idserveur+".json");
         if(autolrole.data.id === idserveur){
             let Role_Testrole = member.guild.roles.cache.find(r => r.id === autolrole.data.autorole);
             member.roles.add(Role_Testrole).catch(console.error);
