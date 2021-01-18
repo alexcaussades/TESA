@@ -90,9 +90,9 @@ const configtwitch = require('./twitch.json');
                      "Authorization": configtwitch.data.auth.bearer
                  }
              }).then(res => res.json()).then(jsonvideo => {
-                 const game = jsonvideo.videos[0].game;
-                 const views = jsonvideo.videos[0].views;
-                 const url = jsonvideo.videos[0].url;
+                 const game = jsonvideo.videos[0].game || null;
+                 const views = jsonvideo.videos[0].views || null;
+                 const url = jsonvideo.videos[0].url || null;
 
                  if (live === false) {
                      const exampleEmbed = new Discord.MessageEmbed()

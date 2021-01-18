@@ -45,7 +45,7 @@ client.on("guildMemberAdd", member =>{
 //     console.log(`Channel delecte: ${channel.name}`)
 // })
 
-client.on('message', message =>{
+client.on("message", message => {
     if(message.content === prefix+"creatMyProfil"){
         let id = message.author.id
         let name = message.author.username
@@ -55,7 +55,7 @@ client.on('message', message =>{
 /**
  * todo function a refaire en urgence
  * */
-client.on("message", message =>{
+client.on("message", message => {
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
@@ -69,7 +69,7 @@ client.on("message", message =>{
     }
 })
 
-client.on("message", message =>{
+client.on("message", message => {
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
@@ -84,7 +84,7 @@ client.on("message", message =>{
 
     }})
 
-client.on("message", message =>{
+client.on("message", message => {
     if (message.content === prefix + "devs"){
         message.delete();
         message.channel.send(`${client.user}`);
@@ -134,7 +134,7 @@ client.on("message", message => {
 /**
  * search metard api ivao
  * */
-client.on("message", message =>{
+client.on("message", message => {
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
@@ -150,7 +150,7 @@ client.on("message", message =>{
  * search fly api ivao
  * */
 
-client.on("message", message =>{
+client.on("message", message => {
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
@@ -165,7 +165,7 @@ client.on("message", message =>{
 /**
  * search atc api ivao
  * */
-client.on("message", message =>{
+client.on("message", message => {
         const commandBody = message.content.slice(prefix.length);
         const args = commandBody.split(' ');
         const command = args.shift().toLowerCase();
@@ -198,7 +198,7 @@ client.on("message", message => {
 /**
  * search vid api ivao
  * */
-client.on("message", message =>{
+client.on("message", message => {
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
@@ -211,7 +211,7 @@ client.on("message", message =>{
 /**
  * creation invite membre
  * */
-client.on("message", message =>{
+client.on("message", message => {
     const command = message.content;
     if(command === prefix+'inviteCreat')
     {
@@ -224,7 +224,7 @@ client.on("message", message =>{
 /**
  * creation invite bot
  * */
-client.on('message', message => {
+client.on("message", message => {
     if(message.content === prefix+"invitebot")
     {
         message.delete();
@@ -232,6 +232,15 @@ client.on('message', message => {
         message.author.send(urlinvite);
     }
 })
+
+client.on("message", message => {
+    if (message.content === prefix+"addsupport") {
+        let addsuport = require("./support/addsupport")
+        addsuport.creat(client, message)
+        message.channel.send('the support is operational')
+    }
+})
+
 
 
 client.login(process.env.token);

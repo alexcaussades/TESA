@@ -1,4 +1,4 @@
-
+const Discord = require('discord.js');
 
 module.exports.run = async (client, message, id, name) => {
     let membre_id = id;
