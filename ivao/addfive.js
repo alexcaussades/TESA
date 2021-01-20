@@ -1,9 +1,9 @@
-const fs = require("fs");
+const fs = require("fs")
 
 module.exports.run = async (id, autorhname, vidarray) => {
-  let membre_id = id;
-  let membre_name = autorhname;
-  let vid = vidarray[0];
+  let membre_id = id
+  let membre_name = autorhname
+  let vid = vidarray[0]
 
   let create = {
     data: {
@@ -13,15 +13,15 @@ module.exports.run = async (id, autorhname, vidarray) => {
     vid: {
       0: vid,
     },
-  };
-  let created = JSON.stringify(create, null, 2);
+  }
+  let created = JSON.stringify(create, null, 2)
   await fs.writeFile(
     "./ivao/favvid/" + membre_id + ".json",
     created,
     function (error) {
       if (error) {
-        console.log(error);
+        console.log(error)
       }
     }
-  );
-};
+  )
+}
