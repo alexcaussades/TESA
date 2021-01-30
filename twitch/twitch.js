@@ -89,10 +89,14 @@ module.exports.run = (client, message, args = "alexcaussades") => {
     })
       .then((res) => res.json())
       .then((json) => {
-        const id = json.data[0].id;
-        const live = json.data[0].is_live;
-        const avatar = json.data[0].thumbnail_url;
-        fetch(configtwitch.data.url.video_debut + id + "/videos", {
+        //&live hellstrif
+        for(let i = 0; i < json.data.length; i++){
+          const element = json.data[i];
+        if (json.data[i].display_name == args) {
+          const id = json.data[i].id;
+          const live = json.data[i].is_live;
+          const avatar = json.data[i].thumbnail_url;
+        fetch(configtwitch.data.url.video_debut + json.data[i].id + "/videos", {
           method: "GET",
           headers: {
             Accept: configtwitch.data.url.apiv5,
@@ -102,9 +106,9 @@ module.exports.run = (client, message, args = "alexcaussades") => {
         })
           .then((res) => res.json())
           .then((jsonvideo) => {
-            const game = jsonvideo.videos[0].game || null;
-            const views = jsonvideo.videos[0].views || null;
-            const url = jsonvideo.videos[0].url || null;
+            const game = jsonvideo.videos[0].game;
+            const views = jsonvideo.videos[0].views;
+            const url = jsonvideo.videos[0].url;
 
             if (live === false) {
               const exampleEmbed = new Discord.MessageEmbed()
@@ -161,6 +165,6 @@ module.exports.run = (client, message, args = "alexcaussades") => {
                 });
             }
           });
-      });
+      }}});
   }
 };
