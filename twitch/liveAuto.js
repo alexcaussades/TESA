@@ -3,19 +3,19 @@ const fetch = require("node-fetch");
 const configtwitch = require("./twitch.json");
 
 module.exports.run = (client, message, args, pdo) => {
-    args = "dasvaldez"
+    args = "techniquesspatiales"
     pdo.run("CREATE TABLE IF NOT EXISTS  onlive(id INTEGER PRIMARY KEY, channels TEXT VARCHAR(255) NOT NULL, status TEXT VARCHAR(255) NOT NULL)");
-            
-    const hook = new Webhook(
-          "https://discord.com/api/webhooks/804312053044871209/AflBOSo-h095rdrqfKTRfkJmnFzjBriNiF45UPCFWWL4BWoYOEhmBmBf7-LoXgQJEr3p"
-        );
+    //pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,["techniquesspatiales", 0])       
+    // const hook = new Webhook(
+    //       "https://discord.com/api/webhooks/804312053044871209/AflBOSo-h095rdrqfKTRfkJmnFzjBriNiF45UPCFWWL4BWoYOEhmBmBf7-LoXgQJEr3p"
+    //     );
         
     const fetch = require("node-fetch");
-        fetch(authtwitch.data.url.channelsquery + args, {
+        fetch(configtwitch.data.url.channelsquery + args, {
           method: "GET",
           headers: {
-            "client-id": authtwitch.data.auth.client_id,
-            Authorization: authtwitch.data.auth.bearer,
+            "client-id": configtwitch.data.auth.client_id,
+            Authorization: configtwitch.data.auth.bearer,
           },
         })
           .then((res) => res.json())
@@ -24,14 +24,12 @@ module.exports.run = (client, message, args, pdo) => {
               const element = json.data[i];
               if (element.is_live === true) {
                 if (element.display_name === args) {
-                  const id = element.id;
-                  const search = pdo.get(
-                    `SELECT * FROM onlive WHERE channels = ?`,
-                    [args],
-                    function (error, row) {
+                    console.log(element.is_live)
+                    pdo.get(`SELECT * FROM onlive WHERE channels = ?`,[args], function (error, row) {
                       if (row) {
                         if (row.status != element.is_live) {
-                          pdo.run("UPDATE onlive SET status = ? WHERE channels = ?", [element.is_live,args]);
+                            console.log(element.is_live)
+                            pdo.run("UPDATE onlive SET status = ? WHERE channels = ?", [element.is_live,args]);
                           if (element.is_live === true) {
                             //TODO add webhook for discord
                             console.log("hello " + row.status + element.is_live);
@@ -40,7 +38,7 @@ module.exports.run = (client, message, args, pdo) => {
                       }
                       if (error) {
                         console.log(error);
-                        bug.bug(channel, "pdo.get", error, pdo, client);
+                        //bug.bug(channel, "db.get", error, db, client);
                       }
                     }
                   );
@@ -54,12 +52,12 @@ module.exports.run = (client, message, args, pdo) => {
                     function (error, row) {
                       if (row) {
                         if (row.status != element.is_live) {
-                          pdo.run("UPDATE onlive SET status = ? WHERE channels = ?", [element.is_live, args]);
+                            pdo.run("UPDATE onlive SET status = ? WHERE channels = ?", [element.is_live, args]);
                         }
                       }
                       if (error) {
                         console.log(error);
-                        bug.bug(channel, "pdo.get", error, pdo, client);
+                        //bug.bug(channel, "pdo.get", error, db, client);
                       }
                     }
                   );
