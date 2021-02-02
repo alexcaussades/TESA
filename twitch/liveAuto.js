@@ -1,11 +1,12 @@
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const configtwitch = require("./twitch.json");
+const bug = require("../bug")
 
 module.exports.run = (client, message, args, pdo) => {
     args = "techniquesspatiales"
     pdo.run("CREATE TABLE IF NOT EXISTS  onlive(id INTEGER PRIMARY KEY, channels TEXT VARCHAR(255) NOT NULL, status TEXT VARCHAR(255) NOT NULL)");
-    //pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,["techniquesspatiales", 0])       
+    //pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,["hellstrif", 0])       
     // const hook = new Webhook(
     //       "https://discord.com/api/webhooks/804312053044871209/AflBOSo-h095rdrqfKTRfkJmnFzjBriNiF45UPCFWWL4BWoYOEhmBmBf7-LoXgQJEr3p"
     //     );
@@ -38,7 +39,7 @@ module.exports.run = (client, message, args, pdo) => {
                       }
                       if (error) {
                         console.log(error);
-                        //bug.bug(channel, "db.get", error, db, client);
+                        bug.bug(channel, "db.get", error, db, client);
                       }
                     }
                   );
@@ -57,7 +58,7 @@ module.exports.run = (client, message, args, pdo) => {
                       }
                       if (error) {
                         console.log(error);
-                        //bug.bug(channel, "pdo.get", error, db, client);
+                        bug.bug(channel, "pdo.get", error, db, client);
                       }
                     }
                   );
