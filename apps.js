@@ -100,32 +100,32 @@ client.on("message", (message) => {
     message.channel.send(
       "Actuellement, mon module Help est absent.\n &feedback pour exécuter une demande"
     )
-  } else if (message.content === reqtesa + " hello") {
-    message.delete()
-    message.channel.send(
-      `${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `
-    )
-  } else if (message.content === reqtesa) {
-    message.delete()
-    message.channel.send(`${message.author} Qu'es que tu me veux ?`)
-  } else if (message.content === reqtesa + " sois gentille") {
-    message.delete()
-    message.channel.send(
-      `${message.author} Oh pardon ! Mais je peux me faire pardonner avec un spam cette nuit si tu le veux bien sure. :rage: `
-    )
-  } else if (message.content === reqtesa + " non merci") {
-    message.delete()
-    message.channel.send(
-      `${message.author} Trop facile humain, j'ai gagné mec ! :middle_finger:  `
-    )
-  } else if (message.content === reqtesa + " je peux avoir un café stp") {
-    message.delete()
-    message.channel.send(`${message.author} avec 100€ et un mars aussi ?`)
-  } else if (message.content === reqtesa + " bonjour") {
-    message.delete()
-    message.channel.send(
-      `${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `
-    )
+  // } else if (message.content === reqtesa + " hello") {
+  //   message.delete()
+  //   message.channel.send(
+  //     `${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `
+  //   )
+  // } else if (message.content === reqtesa) {
+  //   message.delete()
+  //   message.channel.send(`${message.author} Qu'es que tu me veux ?`)
+  // } else if (message.content === reqtesa + " sois gentille") {
+  //   message.delete()
+  //   message.channel.send(
+  //     `${message.author} Oh pardon ! Mais je peux me faire pardonner avec un spam cette nuit si tu le veux bien sure. :rage: `
+  //   )
+  // } else if (message.content === reqtesa + " non merci") {
+  //   message.delete()
+  //   message.channel.send(
+  //     `${message.author} Trop facile humain, j'ai gagné mec ! :middle_finger:  `
+  //   )
+  // } else if (message.content === reqtesa + " je peux avoir un café stp") {
+  //   message.delete()
+  //   message.channel.send(`${message.author} avec 100€ et un mars aussi ?`)
+  // } else if (message.content === reqtesa + " bonjour") {
+  //   message.delete()
+  //   message.channel.send(
+  //     `${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `
+  //   )
   }
 })
 
@@ -137,22 +137,22 @@ client.on("message", (message) => {
   }
 })
 
-client.on("message", (message) => {
-  if (message.content === prefix + "creat database") {
-    message.delete()
-    message.channel.send("creation de la base en cour")
-    database.creatdata
-    message.channel.send(
-      "La création de la base de donées à bien étais éffectuer !"
-    )
-    message.channel.send(tesa.i).then((message) => {
-      message.channel.send(tesa.rp1), 3000
-    })
-    message.channel.send("--------").then((message) => {
-      message.channel.send(tesa.rp2), 3000
-    })
-  }
-})
+// client.on("message", (message) => {
+//   if (message.content === prefix + "creat database") {
+//     message.delete()
+//     message.channel.send("creation de la base en cour")
+//     database.creatdata
+//     message.channel.send(
+//       "La création de la base de donées à bien étais éffectuer !"
+//     )
+//     message.channel.send(tesa.i).then((message) => {
+//       message.channel.send(tesa.rp1), 3000
+//     })
+//     message.channel.send("--------").then((message) => {
+//       message.channel.send(tesa.rp2), 3000
+//     })
+//   }
+// })
 
 client.on("message", (message) => {
   if (message.content === prefix + "user-info") {
@@ -244,6 +244,19 @@ client.on("message", (message) => {
   }
 })
 
+client.on("message", (message) => {
+  const commandBody = message.content.slice(prefix.length)
+  const args = commandBody.split(" ")
+  const command = args.shift().toLowerCase()
+  if (command === "addStreamer") {
+    message.delete()
+    pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,[args, 0])
+    message.channel.send("Le Streamer " + args + "est enregister dans le système")
+  }
+
+  
+})
+
 /**
  * creation invite membre
  * */
@@ -288,6 +301,14 @@ client.on("message", (message) => {
   }
 })
 
+// client.on('guildMemberUpdate', (oldMember, newMember) => {
+//   console.log(oldMember.roles.guild.roles, newMember.roles.guild.roles);
+// });
 
+client.on('guildBanAdd', (guild, user) => {
+  if (message.member.hasPermission("ADMINISTRATOR")) {
+  console.log(guild, user);
+  }
+});
 
 client.login(process.env.token)

@@ -4,13 +4,7 @@ const configtwitch = require("./twitch.json");
 const bug = require("../bug")
 const { Webhook, MessageBuilder } = require("discord-webhook-node");
 
-module.exports.run = (client, message, args, pdo) => {
-    args = "hellstrif"
-    pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,["hellstrif", 0])       
-    // const hook = new Webhook(
-    //       "https://discord.com/api/webhooks/804312053044871209/AflBOSo-h095rdrqfKTRfkJmnFzjBriNiF45UPCFWWL4BWoYOEhmBmBf7-LoXgQJEr3p"
-    //     );
-        
+module.exports.run = (client, message, args, pdo) => {     
     const fetch = require("node-fetch");
         fetch(configtwitch.data.url.channelsquery + args, {
           method: "GET",
