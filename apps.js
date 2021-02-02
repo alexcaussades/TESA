@@ -3,12 +3,22 @@ require("dotenv").config()
 const prefix = process.env.prefix
 const client = new Discord.Client()
 const tesa = require("./test")
-const database = require("./databasesql")
+const sqlite3 = require("sqlite3").verbose();
 const configtwitch = require("./twitch/twitch.json")
 const apiivao = require("./ivao/api-ivao.json")
 const reqtesa = "tesa"
 const profil = require("./profil")
 const favi = require("./ivao/addfive")
+
+const pdo = new sqlite3.Database("programme.db3", sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+   console.error(err.message);
+  }
+  console.log("Connected to the database.");
+ });
+
+pdo.run("CREATE TABLE IF NOT EXISTS  onlive(id INTEGER PRIMARY KEY, channels TEXT VARCHAR(255) NOT NULL, status TEXT VARCHAR(255) NOT NULL)");
+
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
@@ -116,6 +126,14 @@ client.on("message", (message) => {
     message.channel.send(
       `${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `
     )
+  }
+})
+
+client.on("message", (message) => {
+  if( message.content === prefix + "tt")
+  {
+    const liveauto = require("./twitch/liveAuto")
+    liveauto.run(client, message, args = null, pdo)
   }
 })
 
@@ -263,7 +281,7 @@ client.on("message", (message) => {
   }
 })
 
-client.on("message", message => {
+client.on("message", (message) => {
   if (message.content === prefix + "addRoleSupport"){
     let addsuport = require("./support/addsupport")
     addsuport.creatRole(client, message)

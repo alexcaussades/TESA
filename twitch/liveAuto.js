@@ -2,11 +2,11 @@ const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const configtwitch = require("./twitch.json");
 const bug = require("../bug")
+const { Webhook, MessageBuilder } = require("discord-webhook-node");
 
 module.exports.run = (client, message, args, pdo) => {
-    args = "techniquesspatiales"
-    pdo.run("CREATE TABLE IF NOT EXISTS  onlive(id INTEGER PRIMARY KEY, channels TEXT VARCHAR(255) NOT NULL, status TEXT VARCHAR(255) NOT NULL)");
-    //pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,["hellstrif", 0])       
+    args = "hellstrif"
+    pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,["hellstrif", 0])       
     // const hook = new Webhook(
     //       "https://discord.com/api/webhooks/804312053044871209/AflBOSo-h095rdrqfKTRfkJmnFzjBriNiF45UPCFWWL4BWoYOEhmBmBf7-LoXgQJEr3p"
     //     );
@@ -25,15 +25,40 @@ module.exports.run = (client, message, args, pdo) => {
               const element = json.data[i];
               if (element.is_live === true) {
                 if (element.display_name === args) {
-                    console.log(element.is_live)
-                    pdo.get(`SELECT * FROM onlive WHERE channels = ?`,[args], function (error, row) {
+                    const avatar = element.thumbnail_url;
+                    const id = element.id;
+                    //console.log(json)
+                    const gg = pdo.get(`SELECT * FROM onlive WHERE channels = ?`,[args], function (error, row) {
                       if (row) {
                         if (row.status != element.is_live) {
-                            console.log(element.is_live)
                             pdo.run("UPDATE onlive SET status = ? WHERE channels = ?", [element.is_live,args]);
                           if (element.is_live === true) {
-                            //TODO add webhook for discord
-                            console.log("hello " + row.status + element.is_live);
+                            fetch(configtwitch.data.url.broadcaster + id, {
+                                method: "GET",
+                                headers: {
+                                  "client-id": configtwitch.data.auth.client_id,
+                                  Authorization: configtwitch.data.auth.bearer,
+                                },
+                              })
+                                .then((res) => res.json())
+                                .then((json) => {
+                                    const game = json.data[0].game_name;
+                                    const title_stream = json.data[0].title;
+                                    const webhook = "https://discord.com/api/webhooks/806254216368488478/eyEWmAQWUHXSphO9Dz-EJMfkUvQUxi4SR0Gx92RejPO4dll11lBrbVCYAyCukxip5dOf"
+                                    const hook = new Webhook(webhook);
+                                    const embed = new MessageBuilder()
+                                    .setColor("#0099ff")
+                                    .setTitle("Live ON")
+                                    .setURL("https://www.twitch.tv/" + args)
+                                    .setAuthor(args)
+                                    .setDescription(title_stream + " \n Game: " + game)
+                                    .setThumbnail(avatar)
+                                    //.setImage(avatar)
+                                    .setTimestamp()
+                                    .setFooter("T.E.S.A");
+                                    
+                                    hook.send(embed);
+                                })
                           }
                         }
                       }

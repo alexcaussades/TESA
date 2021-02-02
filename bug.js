@@ -8,7 +8,7 @@ module.exports.bug = (channel, infoCommand, error, pdo, client) => {
     const info = infoCommand
     const erreur = error
 
-    client.say(channel, phrase)
+    message.channel.send(channel, phrase)
     
     const hook = new Webhook(webhook);
      const embed = new MessageBuilder()
