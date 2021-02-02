@@ -1,6 +1,6 @@
 {
   "name": "botdiscord",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "Bot Discord the my serveur",
   "main": "apps.js",
   "scripts": {
