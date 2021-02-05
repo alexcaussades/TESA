@@ -233,14 +233,35 @@ client.on("message", (message) => {
   const commandBody = message.content.slice(prefix.length)
   const args = commandBody.split(" ")
   const command = args.shift().toLowerCase()
-  if (command === "addStreamer") {
+  if (command === "addstreamer") {
     message.delete()
-    pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,[args, 0])
-    message.channel.send("Le Streamer " + args + "est enregister dans le système")
-  }
+    if(args){
+      console.log(args)
+      pdo.get(`SELECT * FROM onlive WHERE channels = ?`,[args], function (error, row) {
+        if (row) {
+          console.log(row)
+          if (row.channels == args[0]) {
+            message.channel.send("Le Streamer " + args + " est déjà enregister dans le système")
+          }else {
+            pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,[args, 0])
+            message.channel.send("Le Streamer " + args + " est enregister dans le système")
+          }
+      } if (error){
+        const bug = require("./bug")
+        bug.bug(message, "probleme sur la bdd module addstreamer", error, pdo)
+      }
 
-  
+      else if (!row){
+        pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,[args, 0])
+          message.channel.send("Le Streamer " + args + " est enregister dans le système")
+      }
+  }
+  )}
+  }
 })
+
+
+
 
 /**
  * creation invite membre
