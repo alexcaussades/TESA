@@ -1,11 +1,15 @@
 const request = require("request");
 const Discord = require("discord.js");
+const bug = require("../bug")
+
 
 module.exports.run = (client, message, apiivao, icao) => {
   const sr = apiivao.data.dataatc + icao;
   const fnivao = require("./function_ivao");
   let dataatcjson = require("./atc.json");
   request(sr, function (error, response, body) {
+    if (body)
+  {
     const obj = JSON.parse(body);
 
     // if(obj.nameAirport != undefined){
@@ -150,5 +154,8 @@ module.exports.run = (client, message, apiivao, icao) => {
     } catch (error) {
       console.log(error);
     }
-  });
+  } else {
+    bug.bug(message, "301", "erreure de recherche sur la function ATC", pdo);
+  }
+});
 };

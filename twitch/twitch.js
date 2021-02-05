@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const configtwitch = require("./twitch.json");
+const bug = require("../bug")
 
 module.exports.run = (client, message, args = "alexcaussades") => {
   if (args == false) {
@@ -80,6 +81,7 @@ module.exports.run = (client, message, args = "alexcaussades") => {
           });
       });
   } else if (args) {
+    console.log(args)
     fetch(configtwitch.data.url.channelsquery + args, {
       method: "GET",
       headers: {
@@ -89,13 +91,15 @@ module.exports.run = (client, message, args = "alexcaussades") => {
     })
       .then((res) => res.json())
       .then((json) => {
+        console.log(json)
         //&live hellstrif
         for(let i = 0; i < json.data.length; i++){
           const element = json.data[i];
-        if (json.data[i].display_name == args) {
+        if (json.data[i].broadcaster_login == args) {
           const id = json.data[i].id;
           const live = json.data[i].is_live;
           const avatar = json.data[i].thumbnail_url;
+          console.log(json.data[i])
         fetch(configtwitch.data.url.video_debut + json.data[i].id + "/videos", {
           method: "GET",
           headers: {
@@ -165,6 +169,9 @@ module.exports.run = (client, message, args = "alexcaussades") => {
                 });
             }
           });
-      }}});
+      } else {
+        bug.bug(message, "301", "erreure de recherche", pdo);
+      }
+    }});
   }
 };

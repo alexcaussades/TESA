@@ -1,11 +1,13 @@
 const request = require("request");
 const Discord = require("discord.js");
+const bug = require("../bug")
 
 module.exports.run = (client, message, apiivao, args) => {
   const sr = apiivao.data.datavid + args;
   const fnivao = require("./function_ivao");
   let dataatcjson = require("./atc.json");
   request(sr, function (error, response, body) {
+    if (body){
     const objvid = JSON.parse(body);
     if (objvid.data.atc.Callsign != null) {
       let test = new Discord.MessageEmbed()
@@ -76,5 +78,11 @@ module.exports.run = (client, message, apiivao, args) => {
     } else {
       message.channel.send("not on ligne for the VID: " + args);
     }
-  });
+  } else{
+    bug.bug(message, "301", "erreure de recherche sur le vid", pdo);
+  }
+  }
+  
+  )
+  ;
 };

@@ -58,7 +58,7 @@ module.exports.run = (client, message, args, pdo) => {
                       }
                       if (error) {
                         console.log(error);
-                        bug.bug(channel, "db.get", error, db, client);
+                        bug.bug(message, "db.get", error, pdo);
                       }
                     }
                   );
@@ -77,7 +77,7 @@ module.exports.run = (client, message, args, pdo) => {
                       }
                       if (error) {
                         console.log(error);
-                        bug.bug(channel, "pdo.get", error, db, client);
+                        bug.bug(message, "db.get", error, pdo);
                       }
                     }
                   );

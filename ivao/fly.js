@@ -1,8 +1,12 @@
 const request = require("request");
 const Discord = require("discord.js");
+const bug = require("../bug")
 
 module.exports.run = (client, message, pilot, fnivao, dataatcjson) => {
   request(pilot, function (error, response, body) {
+    if (body){
+
+    
     const objfly = JSON.parse(body);
     let test = new Discord.MessageEmbed()
       .setColor("#8a2be2")
@@ -50,5 +54,9 @@ module.exports.run = (client, message, pilot, fnivao, dataatcjson) => {
       .setTimestamp()
       .setFooter("T.E.S.A");
     message.channel.send(test);
-  });
+  }else {
+    bug.bug(message, "301", "erreure de recherche sur les informations de vols", pdo);
+  }
+}
+);
 };
