@@ -3,3 +3,4 @@
 .idea/
 twitch/twitch.json
 databasesql.js
+package-lock.json
