@@ -170,7 +170,7 @@ module.exports.run = (client, message, args = "alexcaussades") => {
             }
           });
       } else {
-        bug.bug(message, "301", "erreure de recherche", pdo);
+        bug.bug(message, "301", "erreure de recherche");
       }
     }});
   }
