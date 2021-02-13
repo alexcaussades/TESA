@@ -2,7 +2,6 @@ const Discord = require("discord.js")
 require("dotenv").config()
 const prefix = process.env.prefix
 const client = new Discord.Client()
-const tesa = require("./test")
 const sqlite3 = require("sqlite3").verbose();
 const configtwitch = require("./twitch/twitch.json")
 const apiivao = require("./ivao/api-ivao.json")
@@ -61,6 +60,7 @@ client.on("message", (message) => {
     profil.run(client, message, id, name)
   }
 })
+
 /**
  * todo function a refaire en urgence
  * */
@@ -90,44 +90,6 @@ client.on("message", (message) => {
     module_autorole.none(client, message)
   }
 })
-
-// client.on("message", (message) => {
-//   if (message.content === prefix + "devs") {
-//     message.delete()
-//     message.channel.send(`${client.user}`)
-//   } else if (message.content === prefix + "help") {
-//     message.delete()
-//     message.channel.send(
-//       "Actuellement, mon module Help est absent.\n &feedback pour exécuter une demande"
-//     )
-//   // } else if (message.content === reqtesa + " hello") {
-//   //   message.delete()
-//   //   message.channel.send(
-//   //     `${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `
-//   //   )
-//   // } else if (message.content === reqtesa) {
-//   //   message.delete()
-//   //   message.channel.send(`${message.author} Qu'es que tu me veux ?`)
-//   // } else if (message.content === reqtesa + " sois gentille") {
-//   //   message.delete()
-//   //   message.channel.send(
-//   //     `${message.author} Oh pardon ! Mais je peux me faire pardonner avec un spam cette nuit si tu le veux bien sure. :rage: `
-//   //   )
-//   // } else if (message.content === reqtesa + " non merci") {
-//   //   message.delete()
-//   //   message.channel.send(
-//   //     `${message.author} Trop facile humain, j'ai gagné mec ! :middle_finger:  `
-//   //   )
-//   // } else if (message.content === reqtesa + " je peux avoir un café stp") {
-//   //   message.delete()
-//   //   message.channel.send(`${message.author} avec 100€ et un mars aussi ?`)
-//   // } else if (message.content === reqtesa + " bonjour") {
-//   //   message.delete()
-//   //   message.channel.send(
-//   //     `${message.author} Ta vue l'heure, je dors là ! Hey monsieur, je suis une ados qui a besoin de repos `
-//   //   )
-//   }
-// })
 
 client.on("message", (message) => {
   if( message.content === prefix + "tt")
@@ -182,6 +144,7 @@ client.on("message", (message) => {
     module_fly.run(client, message, pilot, fnivao, dataatcjson)
   }
 })
+
 /**
  * search atc api ivao
  * */
@@ -240,7 +203,7 @@ client.on("message", (message) => {
       pdo.get(`SELECT * FROM onlive WHERE channels = ?`,[args], function (error, row) {
         if (row) {
           console.log(row)
-          if (row.channels == args[0]) {
+          if (row.channels === args[0]) {
             message.channel.send("Le Streamer " + args + " est déjà enregister dans le système")
           }else {
             pdo.run(`INSERT INTO onlive(channels, status) VALUES(?,?)`,[args, 0])
@@ -260,7 +223,17 @@ client.on("message", (message) => {
   }
 })
 
-
+client.on("message", (message) => {
+  if (message.content.toLowerCase().startsWith(prefix + "purge")) {
+    if (message.member.hasPermission("MANAGE_MESSAGES")) {
+      console.log(message)
+    message.channel.fetchMessages()
+               .then(function(list){
+                    message.channel.bulkDelete(list);
+                }, function(err){message.channel.send("ERROR: ERROR CLEARING CHANNEL.")})                        
+        }
+  }}
+);
 
 
 /**
@@ -316,5 +289,7 @@ client.on('guildBanAdd', (guild, user) => {
   console.log(guild, user);
   }
 });
+
+
 
 client.login(process.env.token)

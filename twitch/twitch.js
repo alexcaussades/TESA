@@ -19,7 +19,6 @@ module.exports.run = (client, message, args = "alexcaussades") => {
         const id = json.data[0].id;
         const live = json.data[0].is_live;
         const avatar = json.data[0].thumbnail_url;
-        console.log(id);
         fetch(configtwitch.data.url.video_debut + id + "/videos", {
           method: "GET",
           headers: {
@@ -81,7 +80,6 @@ module.exports.run = (client, message, args = "alexcaussades") => {
           });
       });
   } else if (args) {
-    console.log(args)
     fetch(configtwitch.data.url.channelsquery + args, {
       method: "GET",
       headers: {
@@ -91,7 +89,6 @@ module.exports.run = (client, message, args = "alexcaussades") => {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json)
         //&live hellstrif
         for(let i = 0; i < json.data.length; i++){
           const element = json.data[i];
@@ -99,7 +96,6 @@ module.exports.run = (client, message, args = "alexcaussades") => {
           const id = json.data[i].id;
           const live = json.data[i].is_live;
           const avatar = json.data[i].thumbnail_url;
-          console.log(json.data[i])
         fetch(configtwitch.data.url.video_debut + json.data[i].id + "/videos", {
           method: "GET",
           headers: {
