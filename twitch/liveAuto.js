@@ -4,7 +4,7 @@ const configtwitch = require("./twitch.json");
 const bug = require("../bug")
 const { Webhook, MessageBuilder } = require("discord-webhook-node");
 
-module.exports.run = (client, message, args, pdo) => {     
+module.exports.run = (client, args, pdo) => {     
     const fetch = require("node-fetch");
         fetch(configtwitch.data.url.channelsquery + args, {
           method: "GET",

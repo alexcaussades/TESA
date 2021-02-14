@@ -223,6 +223,35 @@ client.on("message", (message) => {
   }
 })
 
+
+client.on("message", (message) => {
+  const commandBody = message.content.slice(prefix.length)
+  const args = commandBody.split(" ")
+  const command = args.shift().toLowerCase()
+  if (command === "delstreamer") {
+    message.delete()
+    if(args){
+      console.log(args)
+      pdo.get(`SELECT * FROM onlive WHERE channels = ?`,[args], function (error, row) {
+        if (row) {
+          console.log(row)
+          if (row.channels === args[0]) {
+            pdo.run(`DELETE FROM onlive WHERE channels = ?`, [row.channels], function (error, row){
+              message.channel.send("Le Streamer " + args + " a était suprimmer dans le système")
+            })
+            
+          }else {
+            message.channel.send("Le Streamer " + args + "ne se trouve  dans le système")
+          }
+      } if (error){
+        const bug = require("./bug")
+        bug.bug(message, "probleme sur la bdd module delstreamer", error, pdo)
+      }
+  }
+  )}
+  }
+})
+
 client.on("message", (message) => {
   if (message.content.toLowerCase().startsWith(prefix + "purge")) {
     if (message.member.hasPermission("MANAGE_MESSAGES")) {
@@ -291,5 +320,18 @@ client.on('guildBanAdd', (guild, user) => {
 });
 
 
+setInterval(() => {
+  pdo.get(`SELECT count(*) FROM onlive`, function (error, row) {
+    if(row["count(*)"]){ 
+      //console.log("check")
+      const count  = row["count(*)"]
+      for(let i= 1; i <= count; i++){
+        pdo.get(`SELECT * FROM onlive WHERE id = ?`, [[i]], function (error, row) {
+          const live = require("./twitch/liveAuto")
+          live.run(client, row.channels, pdo)
+        })
+      }
+    }})
+  }, 60000)
 
 client.login(process.env.token)
