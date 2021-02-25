@@ -9,10 +9,17 @@
     "url": {
       "apiv5": "application/vnd.twitchtv.v5+json",
       "channelsquery": "https://api.twitch.tv/helix/search/channels?query=",
-      "follower": "https://api.twitch.tv/helix/users/follows?to_id=",
+      "follower": "https://api.twitch.tv/helix/users/follows?first=1&from_id=",
+      "video_debut": "https://api.twitch.tv/kraken/channels/",
+      "video_fin": "/videos",
       "broadcaster": "https://api.twitch.tv/helix/channels?broadcaster_id=",
       "streams": "https://api.twitch.tv/kraken/streams/",
-      "getstream": "https://api.twitch.tv/helix/streams"
+      "getstream": "https://api.twitch.tv/helix/streams?user_id=",
+      "GetHype": "https://api.twitch.tv/helix/hypetrain/events?broadcaster_id=",
+      "GetModsTool": "https://api.twitch.tv/helix/moderation/banned/events?broadcaster_id=",
+      "GetSubcribe": "https://api.twitch.tv/helix/subscriptions/events?broadcaster_id=",
+      "clip": "https://api.twitch.tv/helix/clips?broadcaster_id=",
+      "first" : "&first=1"
     }
   }
 }
