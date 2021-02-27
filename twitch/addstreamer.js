@@ -24,14 +24,14 @@ module.exports.run = async (args, pdo, message) => {
                 console.log(id_stream)
                 pdo.get(`SELECT * FROM newlive WHERE id_stream = ?`,[id_stream], function (error, row) {
                 if (row) {
-                  console.log(row)
                   if (row.id_stream === id_stream) {
                     message.channel.send("Le Streamer " + args + " est déjà enregister dans le système")
-                  }else {
-                    pdo.run(`INSERT INTO newlive(id_stream, channels, status) VALUES(?,?,?)`,[id_stream, namestream, status]);
-                    message.channel.send("Le Streamer " + args + " est enregister dans le système")
                   }
-              } if (error){
+               } else {
+                pdo.run(`INSERT INTO newlive(id_stream, channels, status) VALUES(?,?,?)`,[id_stream, namestream, status]);
+                message.channel.send("Le Streamer " + args + " est enregister dans le système")
+               }
+               if (error){
                 const bug = require("./bug")
                 bug.bug(message, "probleme sur la bdd module addstreamer", error, pdo)
               }
