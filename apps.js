@@ -322,18 +322,18 @@ client.on('guildBanAdd', (guild, user) => {
 
 
 
-// setInterval(() => {
-//   pdo.get(`SELECT count(*) FROM onlive`, function (error, row) {
-//     if(row["count(*)"]){ 
-//       //console.log("check")
-//       const count  = row["count(*)"]
-//       for(let i= 1; i <= count; i++){
-//         pdo.get(`SELECT * FROM onlive WHERE id = ?`, [[i]], function (error, row) {
-//           const live = require("./twitch/liveAuto")
-//           live.run(client, row.channels, pdo)
-//         })
-//       }
-//     }})
-//   }, 60000)
+setInterval(() => {
+  pdo.get(`SELECT count(*) FROM newlive`, function (error, row) {
+    if(row["count(*)"]){ 
+      //console.log("check")
+      const count  = row["count(*)"]
+      for(let i= 1; i <= count; i++){
+        pdo.get(`SELECT * FROM newlive WHERE id = ?`, [[i]], function (error, row) {
+          const live = require("./twitch/liveAutov2.js")
+          live.run(client, row.id_stream, pdo)
+        })
+      }
+    }})
+  }, 60000)
 
 client.login(process.env.token)

@@ -4,8 +4,7 @@ const configtwitch = require("./twitch.json");
 const bug = require("../bug")
 const { Webhook, MessageBuilder } = require("discord-webhook-node");
 
-module.exports.run = (client, arg8s, pdo) => {
-    const args = 485824438;
+module.exports.run = (client, args, pdo) => {
     fetch(configtwitch.data.url.getstream + args, {
         method: "GET",
           headers: {
@@ -14,6 +13,7 @@ module.exports.run = (client, arg8s, pdo) => {
           },
     }).then((res) => res.json())
     .then((json) => { 
+      try {
        const user_name = json.data[0].user_name
        const game_name = json.data[0].game_name
        const title = json.data[0].title
@@ -36,7 +36,10 @@ module.exports.run = (client, arg8s, pdo) => {
        .setTimestamp()
        .setFooter("T.E.S.A");
        
-       hook.send(embed);
+       hook.send(embed); 
+      } catch (error) {
+        
+      }
 
 
     })
