@@ -105,8 +105,8 @@ client.on("message", (message) => {
 client.on("message", (message) => {
   if( message.content === prefix + "tt")
   {
-    const liveauto = require("./twitch/liveAuto")
-    liveauto.run(client, message, args = null, pdo)
+    const liveauto = require("./twitch/clip")
+    liveauto.run(client, pdo)
   }
 })
 

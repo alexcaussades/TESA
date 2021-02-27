@@ -7,6 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon apps.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexcaussades/TESA.git"
+  },
   "author": "AlexCaussades",
   "license": "ISC",
   "dependencies": {
