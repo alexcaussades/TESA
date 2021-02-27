@@ -216,7 +216,15 @@ client.on("message", (message) => {
 }}
 })
 
-
+client.on("message", (message) => {
+  const commandBody = message.content.slice(prefix.length)
+  const args = commandBody.split(" ")
+  const command = args.shift().toLowerCase()
+  if (command === "tt") {
+    const live = require("./twitch/liveAutov2.js")
+    live.run(client, args, pdo)
+  }
+})
 
 client.on("message", (message) => {
   const commandBody = message.content.slice(prefix.length)
@@ -311,6 +319,7 @@ client.on('guildBanAdd', (guild, user) => {
   console.log(guild, user);
   }
 });
+
 
 
 // setInterval(() => {

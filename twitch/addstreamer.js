@@ -21,6 +21,7 @@ module.exports.run = async (args, pdo, message) => {
                 const id_stream = element.id;
                 const namestream = element.broadcaster_login;
                 const status = 0;
+                console.log(id_stream)
                 pdo.get(`SELECT * FROM newlive WHERE id_stream = ?`,[id_stream], function (error, row) {
                 if (row) {
                   console.log(row)

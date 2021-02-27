@@ -4,8 +4,12 @@ Fichier de base :
 
 
 creation du files autoLive V2:
-  ☐ recuperation des id live
-  ☐ modificatuion de la bdd
-  ☐ reprendre le code v1 le plus possible!
-  ☐ addstreamer func
-  ☐ delstreamer func
+  ✔ recuperation des id live @done(21-02-25 23:00)
+  ✔ modificatuion de la bdd @done(21-02-25 23:00)
+  ✔ reprendre le code v1 le plus possible! @done(21-02-25 23:01)
+  ✔ addstreamer func @done(21-02-25 23:01) @lasted(34s)
+  ✔ delstreamer func @done(21-02-27 10:38) @lasted(14s)
+  ✔ modification taille img 300X300 @done(21-02-27 10:38)
+
+
+creation de la section des clips: 
