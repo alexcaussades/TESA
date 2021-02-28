@@ -6,7 +6,7 @@ const { Webhook, MessageBuilder } = require("discord-webhook-node");
 
 module.exports.run = (client, arg8s = null, pdo) => {
     const args = "98902092"
-    fetch(configtwitch.data.url.clip + args + configtwitch.data.url.first, {
+    fetch(configtwitch.data.url.GetHype + args, {
         method: "GET",
           headers: {
             "client-id": configtwitch.data.auth.client_id,

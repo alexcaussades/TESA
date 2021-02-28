@@ -105,7 +105,7 @@ client.on("message", (message) => {
 client.on("message", (message) => {
   if( message.content === prefix + "tt")
   {
-    const liveauto = require("./twitch/clip")
+    const liveauto = require("./twitch/modo")
     liveauto.run(client, pdo)
   }
 })
