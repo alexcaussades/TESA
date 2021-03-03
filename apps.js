@@ -2,34 +2,34 @@ const Discord = require("discord.js")
 require("dotenv").config()
 const prefix = process.env.prefix
 const client = new Discord.Client()
-const sqlite3 = require("sqlite3").verbose();
+const sqlite3 = require("sqlite3").verbose()
 const configtwitch = require("./twitch/twitch.json")
 const apiivao = require("./ivao/api-ivao.json")
 const reqtesa = "tesa"
 const profil = require("./profil")
 const favi = require("./ivao/addfive")
 
-const pdo = new sqlite3.Database("programme.db3", sqlite3.OPEN_READWRITE, (err) => {
-  if (err) {
-   console.error(err.message);
+const pdo = new sqlite3.Database(
+  "programme.db3",
+  sqlite3.OPEN_READWRITE,
+  (err) => {
+    if (err) {
+      console.error(err.message)
+    }
+    console.log("Connected to the database.")
   }
-  console.log("Connected to the database.");
- });
+)
 
-
-
-
-
-pdo.run("CREATE TABLE IF NOT EXISTS newlive(id INTEGER PRIMARY KEY, id_stream TEXT VARCHAR(255) NOT NULL, channels TEXT VARCHAR(255) NOT NULL, status TEXT VARCHAR(255) NOT NULL)")
-
+pdo.run(
+  "CREATE TABLE IF NOT EXISTS newlive(id INTEGER PRIMARY KEY, id_stream TEXT VARCHAR(255) NOT NULL, channels TEXT VARCHAR(255) NOT NULL, status TEXT VARCHAR(255) NOT NULL)"
+)
 
 pdo.run("DROP TABLE onlive", function (error) {
   if (error) {
-   console.log(error.message);
+    console.log(error.message)
   }
- });
+})
 
- 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
   client.user.setActivity("I am learning my functions", { type: "PLAYING" })
@@ -103,13 +103,11 @@ client.on("message", (message) => {
 })
 
 client.on("message", (message) => {
-  if( message.content === prefix + "tt")
-  {
+  if (message.content === prefix + "tt") {
     const liveauto = require("./twitch/modo")
     liveauto.run(client, pdo)
   }
 })
-
 
 client.on("message", (message) => {
   if (message.content === prefix + "user-info") {
@@ -188,7 +186,6 @@ client.on("message", (message) => {
   }
 })
 
-
 /**
  * search vid api ivao
  * */
@@ -208,12 +205,13 @@ client.on("message", (message) => {
   const args = commandBody.split(" ")
   const command = args.shift().toLowerCase()
   if (command === "addstreamer") {
-    if(args){
+    if (args) {
       console.log(args)
-      message.delete()      
-  const addstreamer = require("./twitch/addstreamer")
-  addstreamer.run(args, pdo, message)
-}}
+      message.delete()
+      const addstreamer = require("./twitch/addstreamer")
+      addstreamer.run(args, pdo, message)
+    }
+  }
 })
 
 client.on("message", (message) => {
@@ -231,25 +229,42 @@ client.on("message", (message) => {
   const args = commandBody.split(" ")
   const command = args.shift().toLowerCase()
   if (command === "delstreamer") {
-    if(args){
+    if (args) {
       console.log(args)
-      pdo.get(`SELECT * FROM onlive WHERE channels = ?`,[args], function (error, row) {
-        if (row) {
-          console.log(row)
-          if (row.channels === args[0]) {
-            pdo.run(`DELETE FROM onlive WHERE channels = ?`, [row.channels], function (error, row){
-              message.channel.send("Le Streamer " + args + " a était suprimmer dans le système")
-            })
-            
-          }else {
-            message.channel.send("Le Streamer " + args + "ne se trouve  dans le système")
+      pdo.get(
+        `SELECT * FROM onlive WHERE channels = ?`,
+        [args],
+        function (error, row) {
+          if (row) {
+            console.log(row)
+            if (row.channels === args[0]) {
+              pdo.run(
+                `DELETE FROM onlive WHERE channels = ?`,
+                [row.channels],
+                function (error, row) {
+                  message.channel.send(
+                    "Le Streamer " + args + " a était suprimmer dans le système"
+                  )
+                }
+              )
+            } else {
+              message.channel.send(
+                "Le Streamer " + args + "ne se trouve  dans le système"
+              )
+            }
           }
-      } if (error){
-        const bug = require("./bug")
-        bug.bug(message, "probleme sur la bdd module delstreamer", error, pdo)
-      }
-  }
-  )}
+          if (error) {
+            const bug = require("./bug")
+            bug.bug(
+              message,
+              "probleme sur la bdd module delstreamer",
+              error,
+              pdo
+            )
+          }
+        }
+      )
+    }
   }
 })
 
@@ -257,14 +272,17 @@ client.on("message", (message) => {
   if (message.content.toLowerCase().startsWith(prefix + "purge")) {
     if (message.member.hasPermission("MANAGE_MESSAGES")) {
       console.log(message)
-    message.channel.fetchMessages()
-               .then(function(list){
-                    message.channel.bulkDelete(list);
-                }, function(err){message.channel.send("ERROR: ERROR CLEARING CHANNEL.")})                        
+      message.channel.fetchMessages().then(
+        function (list) {
+          message.channel.bulkDelete(list)
+        },
+        function (err) {
+          message.channel.send("ERROR: ERROR CLEARING CHANNEL.")
         }
-  }}
-);
-
+      )
+    }
+  }
+})
 
 /**
  * creation invite membre
@@ -304,7 +322,7 @@ client.on("message", (message) => {
 })
 
 client.on("message", (message) => {
-  if (message.content === prefix + "addRoleSupport"){
+  if (message.content === prefix + "addRoleSupport") {
     let addsuport = require("./support/addsupport")
     addsuport.creatRole(client, message)
   }
@@ -314,26 +332,29 @@ client.on("message", (message) => {
 //   console.log(oldMember.roles.guild.roles, newMember.roles.guild.roles);
 // });
 
-client.on('guildBanAdd', (guild, user) => {
+client.on("guildBanAdd", (guild, user) => {
   if (message.member.hasPermission("ADMINISTRATOR")) {
-  console.log(guild, user);
+    console.log(guild, user)
   }
-});
-
-
+})
 
 setInterval(() => {
   pdo.get(`SELECT count(*) FROM newlive`, function (error, row) {
-    if(row["count(*)"]){ 
+    if (row["count(*)"]) {
       //console.log("check")
-      const count  = row["count(*)"]
-      for(let i= 1; i <= count; i++){
-        pdo.get(`SELECT * FROM newlive WHERE id = ?`, [[i]], function (error, row) {
-          const live = require("./twitch/liveAutov2.js")
-          live.run(client, row.id_stream, pdo)
-        })
+      const count = row["count(*)"]
+      for (let i = 1; i <= count; i++) {
+        pdo.get(
+          `SELECT * FROM newlive WHERE id = ?`,
+          [[i]],
+          function (error, row) {
+            const live = require("./twitch/liveAutov2.js")
+            live.run(client, row.id_stream, pdo)
+          }
+        )
       }
-    }})
-  }, 60000)
+    }
+  })
+}, 60000)
 
 client.login(process.env.token)
