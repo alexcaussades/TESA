@@ -110,6 +110,24 @@ client.on("message", (message) => {
 })
 
 client.on("message", (message) => {
+  if (message.content === prefix + "bug") {
+    message.channel.send("https://github.com/alexcaussades/TESA/issues")
+  }
+})
+
+client.on("message", (message) => {
+  if (message.content === prefix + "repro") {
+    message.channel.send("https://github.com/alexcaussades/TESA/")
+  }
+})
+
+client.on("message", (message) => {
+  if (message.content === prefix + "git") {
+    message.channel.send("https://github.com/alexcaussades/")
+  }
+})
+
+client.on("message", (message) => {
   if (message.content === prefix + "user-info") {
     message.delete()
     message.channel.send(
