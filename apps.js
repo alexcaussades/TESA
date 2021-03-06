@@ -97,8 +97,9 @@ client.on("message", (message) => {
     let module_autorole = require("./autorole/autorole")
     if (message.member.hasPermission("BAN_MEMBERS")) {
       module_autorole.run(client, message, args)
+    }else{
+       module_autorole.none(client, message)
     }
-    module_autorole.none(client, message)
   }
 })
 
@@ -116,7 +117,7 @@ client.on("message", (message) => {
 })
 
 client.on("message", (message) => {
-  if (message.content === prefix + "repro") {
+  if (message.content === prefix + "repo") {
     message.channel.send("https://github.com/alexcaussades/TESA/")
   }
 })
