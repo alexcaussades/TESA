@@ -247,6 +247,16 @@ client.on("message", (message) => {
   const commandBody = message.content.slice(prefix.length)
   const args = commandBody.split(" ")
   const command = args.shift().toLowerCase()
+  if (command === "gitusers") {
+    const live = require("./git/users")
+    live.run(client, args, pdo)
+  }
+})
+
+client.on("message", (message) => {
+  const commandBody = message.content.slice(prefix.length)
+  const args = commandBody.split(" ")
+  const command = args.shift().toLowerCase()
   if (command === "delstreamer") {
     if (args) {
       console.log(args)
