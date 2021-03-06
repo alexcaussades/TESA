@@ -30,7 +30,7 @@ module.exports.run = (client, args, pdo) => {
                 const day = YM[2].split('T')
                 const heure = day[1].split(":")
                 const heureparis = heure[0] + 1
-                const start = "**Started at: **"+ day[0]+ "/"+YM[1]+"/"+YM[0]+" - " + heure[0] + "H" + heure[1]
+                const start = "**Started at: **"+ day[0]+ "/"+YM[1]+"/"+YM[0]+" - " + heureparis + "H" + heure[1]
                 const img = configtwitch.data.img.debutimg + user_login + configtwitch.data.img.fin
 
                 const webhook = "https://discord.com/api/webhooks/806254216368488478/eyEWmAQWUHXSphO9Dz-EJMfkUvQUxi4SR0Gx92RejPO4dll11lBrbVCYAyCukxip5dOf"
