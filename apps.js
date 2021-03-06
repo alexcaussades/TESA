@@ -238,7 +238,7 @@ client.on("message", (message) => {
   const args = commandBody.split(" ")
   const command = args.shift().toLowerCase()
   if (command === "tt") {
-    const live = require("./twitch/liveAutov2.js")
+    const live = require("./git/users")
     live.run(client, args, pdo)
   }
 })

@@ -1,0 +1,7 @@
+{
+    "data": {
+        "url": {
+            "users" : "https://api.github.com/users/"
+        }
+    }
+}
