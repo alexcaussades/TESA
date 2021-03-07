@@ -29,7 +29,7 @@ module.exports.run = (client, args, pdo) => {
                 const YM = date.split('-')
                 const day = YM[2].split('T')
                 const heure = day[1].split(":")
-                const heureparis = heure[0] + 1
+                const heureparis = number(heure[0]) + 1
                 const start = "**Started at: **"+ day[0]+ "/"+YM[1]+"/"+YM[0]+" - " + heureparis + "H" + heure[1]
                 const img = configtwitch.data.img.debutimg + user_login + configtwitch.data.img.fin
 
