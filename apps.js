@@ -233,13 +233,23 @@ client.on("message", (message) => {
   }
 })
 
+// client.on("message", (message) => {
+//   const commandBody = message.content.slice(prefix.length)
+//   const args = commandBody.split(" ")
+//   const command = args.shift().toLowerCase()
+//   if (command === "tt") {
+//     const live = require("./ivao/vac")
+//     live.run(client, message, args, pdo)
+//   }
+// })
+
 client.on("message", (message) => {
   const commandBody = message.content.slice(prefix.length)
   const args = commandBody.split(" ")
   const command = args.shift().toLowerCase()
-  if (command === "tt") {
-    const live = require("./git/users")
-    live.run(client, args, pdo)
+  if (command === "vac") {
+    const live = require("./ivao/vac")
+    live.run(client, message, args, pdo)
   }
 })
 
