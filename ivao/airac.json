@@ -7,70 +7,70 @@
                     "day": "25",
                     "month": "FEB",
                     "year": "2021",
-                    "airac": "Airac 04/21"
+                    "airac": "AIRAC 04/21"
                 },
                 "3": {
                     "id": "3",
                     "day": "25",
                     "month": "MAR",
                     "year": "2021",
-                    "airac": "Airac 05/21"
+                    "airac": "AIRAC 05/21"
                 },
                 "4": {
                     "id": "4",
                     "day": "22",
                     "month": "APR",
                     "year": "2021",
-                    "airac": "Airac 06/21"
+                    "airac": "AIRAC 06/21"
                 },
                 "5": {
                     "id": "5",
                     "day": "20",
                     "month": "MAY",
                     "year": "2021",
-                    "airac": "Airac 07/21"
+                    "airac": "AIRAC 07/21"
                 },
                 "6": {
                     "id": "6",
                     "day": "17",
                     "month": "JUN",
                     "year": "2021",
-                    "airac": "Airac 08/21"
+                    "airac": "AIRAC 08/21"
                 },
                 "7": {
                     "id": "7",
                     "day": "15",
                     "month": "JUL",
                     "year": "2021",
-                    "airac": "Airac 09/21"
+                    "airac": "AIRAC 09/21"
                 },
                 "8": {
                     "id": "8",
                     "day": "12",
                     "month": "AUG",
                     "year": "2021",
-                    "airac": "Airac 10/21"
+                    "airac": "AIRAC 10/21"
                 },
                 "9": {
                     "id": "9",
                     "day": "9",
                     "month": "SEP",
                     "year": "2021",
-                    "airac": "Airac 11/21"
+                    "airac": "AIRAC 11/21"
                 },
                 "10": {
                     "id": "10",
                     "day": "7",
                     "month": "OCT",
                     "year": "2021",
-                    "airac": "Airac 12/21"
+                    "airac": "AIRAC 12/21"
                 },
                 "11": {
                     "id": "11",
                     "day": "04",
                     "month": "NOV",
                     "year": "2021",
-                    "airac": "Airac 13/21"
+                    "airac": "AIRAC 13/21"
                 }
             }
         }

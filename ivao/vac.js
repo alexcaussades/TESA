@@ -1,5 +1,6 @@
 const { datedata } = require("./airac.json");
 const Discord = require("discord.js");
+const fetch = require("node-fetch");
 
 
 
@@ -13,7 +14,7 @@ const url2 = "/Atlas-VAC/PDF_AIPparSSection/VAC/AD/AD-2.";
 const pdf = ".pdf";
 const tiret = "_";
 const UpercaseArgs = args.toString().toUpperCase();
-console.log(getDateDay);
+
 if (VerifyDate === datedata.number.data[getDateMonth]) {
     if (getDateDay < datedata.number.data[getDateMonth].day) {
         const day = datedata.number.data[getDateMonth].day;
@@ -22,7 +23,15 @@ if (VerifyDate === datedata.number.data[getDateMonth]) {
         const airac = datedata.number.data[getDateMonth].airac;
         const file =
             url + day + tiret + month + tiret + year + url2 + UpercaseArgs + pdf;
-            message.author.send(file);
+            fetch(file, { method: "GET"}).then(function(reponse){
+                if(reponse.status != "200")
+                {
+                    message.author.send("Pas de carte VAC pour: " + args)
+                }else{
+                    message.channel.send(airac + " carte VAC pour: " + UpercaseArgs + " \n" + file);
+                }
+            })
+
     } else if (getDateDay > datedata.number.data[getDateMonth].day) {
         const NewMonth = datedata.number.data[getDateMonth];
         const DataPlus = +NewMonth.id + 1;
@@ -33,7 +42,14 @@ if (VerifyDate === datedata.number.data[getDateMonth]) {
             const airac = datedata.number.data[DataPlus].airac;
             const file =
                 url + day + tiret + month + tiret + year + url2 + UpercaseArgs + pdf;
-                message.author.send(file);
+                fetch(file, { method: "GET"}).then(function(reponse){
+                    if(reponse.status != "200")
+                    {
+                        message.author.send("Pas de carte VAC pour: " + args)
+                    }else{
+                        message.channel.send(airac + " carte VAC pour: " + UpercaseArgs + " \n" + file);
+                    }
+                })
         }
     }
 }
