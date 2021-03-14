@@ -248,6 +248,7 @@ client.on("message", (message) => {
   const args = commandBody.split(" ")
   const command = args.shift().toLowerCase()
   if (command === "vac") {
+    message.delete()
     const live = require("./ivao/vac")
     live.run(client, message, args, pdo)
   }
@@ -307,21 +308,21 @@ client.on("message", (message) => {
   }
 })
 
-client.on("message", (message) => {
-  if (message.content.toLowerCase().startsWith(prefix + "purge")) {
-    if (message.member.hasPermission("MANAGE_MESSAGES")) {
-      console.log(message)
-      message.channel.fetchMessages().then(
-        function (list) {
-          message.channel.bulkDelete(list)
-        },
-        function (err) {
-          message.channel.send("ERROR: ERROR CLEARING CHANNEL.")
-        }
-      )
-    }
-  }
-})
+// client.on("message", (message) => {
+//   if (message.content.toLowerCase().startsWith(prefix + "purge")) {
+//     if (message.member.hasPermission("MANAGE_MESSAGES")) {
+//       console.log(message)
+//       message.channel.fetchMessages().then(
+//         function (list) {
+//           message.channel.bulkDelete(list)
+//         },
+//         function (err) {
+//           message.channel.send("ERROR: ERROR CLEARING CHANNEL.")
+//         }
+//       )
+//     }
+//   }
+// })
 
 /**
  * creation invite membre
