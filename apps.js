@@ -397,13 +397,30 @@ setInterval(() => {
           `SELECT * FROM newlive WHERE id = ?`,
           [[i]],
           function (error, row) {
+            if(row != undefined){
             const live = require("./twitch/liveAutov2.js")
+            console.log(row)
             live.run(client, row.id_stream, pdo)
+            }
           }
         )
       }
     }
   })
-}, 60000)
+}, 10000)
+
+
+setInterval(()=> {
+  client.on("message", (message) => {
+    const commandBody = message.content.slice(prefix.length)
+    const args = commandBody.split(" ")
+    const command = args.shift().toLowerCase()
+    if (command === "vid") {
+      message.delete()
+      let module_vidsr = require("./ivao/vid")
+      module_vidsr.run(client, message, apiivao, args)
+    }
+  })
+})
 
 client.login(process.env.token)
