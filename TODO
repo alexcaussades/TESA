@@ -11,12 +11,17 @@ creation du files autoLive V2:
   ✔ delstreamer func @done(21-02-27 10:38) @lasted(14s)
   ✔ modification taille img 300X300 @done(21-02-27 10:38)
   ✔ modification de l'heure en +1 || ou de rajouter UTC @done(21-03-03 21:11)
-  ☐ modification en heure automatique ete // hiver
+  ✔ modification en heure automatique hiver @done(21-04-05 18:22)
 
 
 creation de la section des clips: 
   ☐ recherche sur les 5 derniers clips 
 
 module hype :
-  ☐ mettre le code en place pour la hype du service :) ;) 
+  ☐ mettre le code en place pour la hype du service
 
+module streamer : 
+  ☐ faire le module delect streamer 
+  ☐ verification du code avec valeur 
+  ☐ deployment sur le serveur
+  ☐ module addstreamer 
