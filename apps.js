@@ -399,7 +399,6 @@ setInterval(() => {
           function (error, row) {
             if(row != undefined){
             const live = require("./twitch/liveAutov2.js")
-            console.log(row)
             live.run(client, row.id_stream, pdo)
             }
           }
@@ -407,20 +406,13 @@ setInterval(() => {
       }
     }
   })
-}, 10000)
+}, 60000)
 
 
 setInterval(()=> {
-  client.on("message", (message) => {
-    const commandBody = message.content.slice(prefix.length)
-    const args = commandBody.split(" ")
-    const command = args.shift().toLowerCase()
-    if (command === "vid") {
-      message.delete()
-      let module_vidsr = require("./ivao/vid")
-      module_vidsr.run(client, message, apiivao, args)
-    }
-  })
-})
+       let module_vidsr = require("./ivao/recherche")
+      module_vidsr.run(client, message, apiivao, 319840)
+    }, 300000)
+
 
 client.login(process.env.token)
