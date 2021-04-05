@@ -24,11 +24,11 @@ pdo.run(
   "CREATE TABLE IF NOT EXISTS newlive(id INTEGER PRIMARY KEY, id_stream TEXT VARCHAR(255) NOT NULL, channels TEXT VARCHAR(255) NOT NULL, status TEXT VARCHAR(255) NOT NULL)"
 )
 
-pdo.run("DROP TABLE onlive", function (error) {
-  if (error) {
-    console.log(error.message)
-  }
-})
+// pdo.run("DROP TABLE onlive", function (error) {
+//   if (error) {
+//     console.log(error.message)
+//   }
+// })
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
@@ -233,15 +233,15 @@ client.on("message", (message) => {
   }
 })
 
-// client.on("message", (message) => {
-//   const commandBody = message.content.slice(prefix.length)
-//   const args = commandBody.split(" ")
-//   const command = args.shift().toLowerCase()
-//   if (command === "tt") {
-//     const live = require("./ivao/vac")
-//     live.run(client, message, args, pdo)
-//   }
-// })
+client.on("message", (message) => {
+  const commandBody = message.content.slice(prefix.length)
+  const args = commandBody.split(" ")
+  const command = args.shift().toLowerCase()
+  if (command === "tt") {
+    const live = require("./twitch/delstreamer")
+    live.run(client, message, args, pdo)
+  }
+})
 
 client.on("message", (message) => {
   const commandBody = message.content.slice(prefix.length)
@@ -351,6 +351,15 @@ client.on("message", (message) => {
       "https://discord.com/api/oauth2/authorize?client_id=794282559290212352&permissions=8&scope=bot"
     message.author.send(urlinvite)
   }
+})
+
+client.on("message", (message) => {
+  if(message.content === prefix + "liststreamer")
+  {
+    const liststreamer = require("./twitch/liststreamer")
+    liststreamer.run(client, message, pdo)
+  }
+  
 })
 
 client.on("message", (message) => {

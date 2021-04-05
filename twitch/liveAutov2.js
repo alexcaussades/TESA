@@ -29,11 +29,11 @@ module.exports.run = (client, args, pdo) => {
                 const YM = date.split('-')
                 const day = YM[2].split('T')
                 const heure = day[1].split(":")
-                const heureparis = heure[0]
+                const heureparis = +heure[0] +2
                 const start = "**Started at: **"+ day[0]+ "/"+YM[1]+"/"+YM[0]+" - " + heureparis + "H" + heure[1]
                 const img = configtwitch.data.img.debutimg + user_login + configtwitch.data.img.fin
 
-                const webhook = "https://discord.com/api/webhooks/806254216368488478/eyEWmAQWUHXSphO9Dz-EJMfkUvQUxi4SR0Gx92RejPO4dll11lBrbVCYAyCukxip5dOf"
+                const webhook = "https://discord.com/api/webhooks/828666314335453256/5r4983nJX7BEPLVbUSl4aTyeeW0eot8gkPDGYfp9sj61ekga2u8ThhnrSq8agxGmMTb6"
                 const hook = new Webhook(webhook);
                 const embed = new MessageBuilder()
                 .setColor("#0099ff")
