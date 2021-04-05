@@ -411,7 +411,7 @@ setInterval(() => {
 
 setInterval(()=> {
        let module_vidsr = require("./ivao/recherche")
-      module_vidsr.run(client, message, apiivao, 319840)
+      module_vidsr.run(client, message, apiivao, "319840")
     }, 300000)
 
 
