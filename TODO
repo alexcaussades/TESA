@@ -1,6 +1,6 @@
 
 Fichier de base : 
-  ☐ modification du fichier sur le serveur !
+  ✔ modification du fichier sur le serveur ! @done(21-05-05 18:42)
 
 
 creation du files autoLive V2:
@@ -25,3 +25,4 @@ module streamer :
   ☐ verification du code avec valeur 
   ☐ deployment sur le serveur
   ☐ module addstreamer 
+
