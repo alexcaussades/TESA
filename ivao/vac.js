@@ -14,7 +14,7 @@ const url2 = "/Atlas-VAC/PDF_AIPparSSection/VAC/AD/AD-2.";
 const pdf = ".pdf";
 const tiret = "_";
 const UpercaseArgs = args.toString().toUpperCase();
-
+console.log(VerifyDate)
 if (VerifyDate === datedata.number.data[getDateMonth].id) {
     if (getDateDay < datedata.number.data[getDateMonth].day) {
         
