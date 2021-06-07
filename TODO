@@ -28,4 +28,4 @@ module streamer :
 
 carte vac:
   ✔ verification du code source @done(21-05-13 11:29)
-  ☐ mettre le code en beta test @started(21-05-13 11:28)
+  ✔ mettre le code en beta test @started(21-05-13 11:28) @done(21-05-13 11:52) @lasted(24m11s)
