@@ -409,10 +409,10 @@ setInterval(() => {
 }, 60000)
 
 
-// setInterval(()=> {
-//        let module_vidsr = require("./ivao/recherche")
-//       module_vidsr.run(client, message, apiivao, "319840")
-//     }, 300000)
+setInterval(()=> {
+       let module_vidsr = require("./ivao/updateapi")
+      module_vidsr.updateApiIvao()
+    }, 30000)
 
 
 client.login(process.env.token)
