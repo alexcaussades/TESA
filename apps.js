@@ -97,8 +97,8 @@ client.on("message", (message) => {
     let module_autorole = require("./autorole/autorole")
     if (message.member.hasPermission("BAN_MEMBERS")) {
       module_autorole.run(client, message, args)
-    }else{
-       module_autorole.none(client, message)
+    } else {
+      module_autorole.none(client, message)
     }
   }
 })
@@ -354,12 +354,10 @@ client.on("message", (message) => {
 })
 
 client.on("message", (message) => {
-  if(message.content === prefix + "liststreamer")
-  {
+  if (message.content === prefix + "liststreamer") {
     const liststreamer = require("./twitch/liststreamer")
     liststreamer.run(client, message, pdo)
   }
-  
 })
 
 client.on("message", (message) => {
@@ -397,9 +395,9 @@ setInterval(() => {
           `SELECT * FROM newlive WHERE id = ?`,
           [[i]],
           function (error, row) {
-            if(row != undefined){
-            const live = require("./twitch/liveAutov2.js")
-            live.run(client, row.id_stream, pdo)
+            if (row != undefined) {
+              const live = require("./twitch/liveAutov2.js")
+              live.run(client, row.id_stream, pdo)
             }
           }
         )
@@ -408,11 +406,9 @@ setInterval(() => {
   })
 }, 60000)
 
-
-setInterval(()=> {
-       let module_vidsr = require("./ivao/updateapi")
-      module_vidsr.updateApiIvao()
-    }, 30000)
-
+setInterval(() => {
+  let module_vidsr = require("./ivao/updateapi")
+  module_vidsr.updateApiIvao()
+}, 180000)
 
 client.login(process.env.token)
