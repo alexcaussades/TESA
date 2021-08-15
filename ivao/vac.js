@@ -6,7 +6,7 @@ const fetch = require("node-fetch");
 
 module.exports.run = (client, message, args, pdo) => {
 const date = new Date();
-const getDateMonth = date.getMonth();
+const getDateMonth = +date.getMonth() + 1;
 const getDateDay = date.getDate();
 const VerifyDate = datedata.number.data[getDateMonth].id;
 const url = "https://www.sia.aviation-civile.gouv.fr/dvd/eAIP_";
@@ -14,14 +14,13 @@ const url2 = "/Atlas-VAC/PDF_AIPparSSection/VAC/AD/AD-2.";
 const pdf = ".pdf";
 const tiret = "_";
 const UpercaseArgs = args.toString().toUpperCase();
-console.log(VerifyDate)
-if (VerifyDate === datedata.number.data[getDateMonth].id) {
-    if (getDateDay < datedata.number.data[getDateMonth].day) {
-        
+
+if (VerifyDate == datedata.number.data[getDateMonth].id) {
         const day = datedata.number.data[getDateMonth].day;
         const month = datedata.number.data[getDateMonth].month;
         const year = datedata.number.data[getDateMonth].year;
         const airac = datedata.number.data[getDateMonth].airac;
+        if(day <= getDateDay) { 
         const file =
             url + day + tiret + month + tiret + year + url2 + UpercaseArgs + pdf;
             fetch(file, { method: "GET"}).then(function(reponse){
@@ -33,7 +32,7 @@ if (VerifyDate === datedata.number.data[getDateMonth].id) {
                 }
             })
 
-    } else if (getDateDay > datedata.number.data[getDateMonth].day) {
+    } else{
         const NewMonth = datedata.number.data[getDateMonth].id;
         const DataPlus = +NewMonth.id + 1;
         if (DataPlus) {

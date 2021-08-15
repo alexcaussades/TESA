@@ -32,7 +32,7 @@ pdo.run(
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
-  client.user.setActivity("I am learning my functions", { type: "PLAYING" })
+  client.user.setActivity("!help", { type: "PLAYING" })
 })
 
 // client.on("message", message =>{
