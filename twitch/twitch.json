@@ -1,0 +1,30 @@
+{
+  "data": {
+    "auth": {
+      "client_id": "gp762nuuoqcoxypju8c569th9wz7q5",
+      "RefreshToken": "ny06jzyqnlqc42267gh2m1sy8c45zyvry318k2tz7d7uc91p45",
+      "AccessToken": "Bearer bqoeh823k2lzflfl98s38iu4skuenm",
+      "bearer": "Bearer bqoeh823k2lzflfl98s38iu4skuenm"
+    },
+    "url": {
+      "apiv5": "application/vnd.twitchtv.v5+json",
+      "channelsquery": "https://api.twitch.tv/helix/search/channels?query=",
+      "follower": "https://api.twitch.tv/helix/users/follows?first=1&from_id=",
+      "video_debut": "https://api.twitch.tv/kraken/channels/",
+      "video_fin": "/videos",
+      "broadcaster": "https://api.twitch.tv/helix/channels?broadcaster_id=",
+      "streams": "https://api.twitch.tv/kraken/streams/",
+      "getstream": "https://api.twitch.tv/helix/streams?user_id=",
+      "GetHype": "https://api.twitch.tv/helix/hypetrain/events?broadcaster_id=",
+      "GetModsTool": "https://api.twitch.tv/helix/moderation/banned/events?broadcaster_id=",
+      "GetSubcribe": "https://api.twitch.tv/helix/subscriptions/events?broadcaster_id=",
+      "clip": "https://api.twitch.tv/helix/clips?broadcaster_id=",
+      "first" : "&first=1"
+    },
+    "img": {
+      "debutimg": "https://static-cdn.jtvnw.net/previews-ttv/live_user_",
+      "fin" : "-600x300.jpg"
+    }
+  }
+}
+  
